@@ -26,6 +26,6 @@ public:
 
 class Viewer {
 private:
-	string 
+
 public:
 };
