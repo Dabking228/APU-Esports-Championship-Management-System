@@ -23,5 +23,8 @@
     <ClInclude Include="structure.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Queue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

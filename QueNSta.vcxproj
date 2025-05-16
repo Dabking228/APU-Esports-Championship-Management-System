@@ -130,6 +130,7 @@
     <ClCompile Include="QueNSta.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Queue.hpp" />
     <ClInclude Include="structure.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
