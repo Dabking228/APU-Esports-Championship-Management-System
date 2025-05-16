@@ -1,8 +1,11 @@
 #pragma once
 #include <iostream>
+#include <functional>
 using namespace std;
 
 template <typename T> class Queue {
+protected:
+	string QueueName;
 	
 private:
 	struct QueueNode {
@@ -13,8 +16,8 @@ private:
 
 	QueueNode* HEAD;
 	QueueNode* TAIL;
-	string QueueName;
 	int size = 0;
+	int MAXSIZE = 0;
 
 	QueueNode* createNewNode(T type) {
 		QueueNode* node = new QueueNode();
@@ -28,6 +31,12 @@ public:
 	Queue(string name) {
 		HEAD = TAIL = nullptr;
 		this->QueueName = name;
+	}
+
+	Queue(string name, int maxSize) {
+		HEAD = TAIL = nullptr;
+		this->QueueName = name;
+		this->MAXSIZE = maxSize;
 	}
 
 	void enQueue(T type) {
@@ -104,11 +113,17 @@ public:
 		return current->type;
 	}
 
-	void listQueue() {
+	T front() {
+		return HEAD->type;
+	}
+
+
+	void listQueue(function<string (T)> func) {
 		QueueNode* temp = HEAD;
 
 		while (temp != nullptr) {
-			cout << "Queue: " << temp->type << endl;
+
+			cout << "Queue: " << func(temp->type) << endl;
 			temp = temp->next;
 		}
 
@@ -125,4 +140,26 @@ public:
 	int getQueueLength() {
 		return size;
 	}
+
+
+	/*
+	Unused code
+	Part of unused code due to adding new stuff into it.
+	keep this as a point of reference
+	
+	void listQueue() {
+		QueueNode* temp = HEAD;
+
+		while (temp != nullptr) {
+			cout << "Queue: " << temp->type << endl;
+			temp = temp->next;
+		}
+
+		cout << "Queue End" << endl;
+	}
+
+	*/
+
+
+
 };
