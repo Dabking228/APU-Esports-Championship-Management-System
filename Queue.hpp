@@ -3,31 +3,31 @@
 #include <functional>
 using namespace std;
 
+template <typename T> struct QueueNode {
+	QueueNode* prev = nullptr;
+	T type;
+	QueueNode* next = nullptr;
+};
+
 template <typename T> class Queue {
 protected:
 	string QueueName;
-	
-private:
-	struct QueueNode {
-		QueueNode* prev;
-		T type;
-		QueueNode* next;
-	};
-
-	QueueNode* HEAD;
-	QueueNode* TAIL;
 	int size = 0;
 	int MAXSIZE = 0;
 
-	QueueNode* createNewNode(T type) {
-		QueueNode* node = new QueueNode();
+	QueueNode<T>* createNewNode(T type) {
+		QueueNode<T>* node = new QueueNode<T>();
 		node->type = type;
 		node->next = nullptr;
 		node->prev = nullptr;
 		return node;
 	}
+	QueueNode<T>* HEAD;
+	QueueNode<T>* TAIL;
 
 public:
+	Queue () {}
+
 	Queue(string name) {
 		HEAD = TAIL = nullptr;
 		this->QueueName = name;
@@ -40,7 +40,7 @@ public:
 	}
 
 	void enQueue(T type) {
-		QueueNode* node = this->createNewNode(type);
+		QueueNode<T>* node = this->createNewNode(type);
 
 		if (HEAD == nullptr) {
 			HEAD = TAIL = node;
@@ -58,7 +58,7 @@ public:
 	T deQueue() {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
-		QueueNode* current = nullptr;
+		QueueNode<T>* current = nullptr;
 		current = HEAD;
 		HEAD = current->next;
 		if (HEAD == nullptr) {
@@ -79,7 +79,7 @@ public:
 	T deQueue(T type) {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
-		QueueNode* current, *currPrev, *currNext = nullptr;
+		QueueNode<T>* current, *currPrev, *currNext = nullptr;
 		current = HEAD;
 		while (true) {
 			if (current->type == type) {
@@ -119,7 +119,7 @@ public:
 
 
 	void listQueue(function<string (T)> func) {
-		QueueNode* temp = HEAD;
+		QueueNode<T>* temp = HEAD;
 
 		while (temp != nullptr) {
 
