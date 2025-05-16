@@ -9,17 +9,19 @@ private:
 	string PlayerID;
 	string PlayerName;
 	int PlayerRating;
+	int PlayerPriority;
 	bool isCheckedIn;
 
 
 public:
 	Player() { }
 
-	Player(string PlayerID, string PlayerName, int PlayerRating) {
+	Player(string PlayerID, string PlayerName, int PlayerRating, int PlayerPriority) {
 		this->isCheckedIn = false;
 		this->PlayerID = PlayerID;
 		this->PlayerName = PlayerName;
 		this->PlayerRating = PlayerRating;
+		this->PlayerPriority = PlayerPriority;
 	}
 
 
@@ -30,18 +32,11 @@ public:
 	/* 
 	Getter and Setter
 	*/
-	string getPlayerID() {
-		return this->PlayerID;
-	}
-	string getPlayerName() {
-		return this->PlayerName;
-	}
-	int getPlayerRating() {
-		return this->PlayerRating;
-	}
-	bool getCheckedInStatus() {
-		return this->isCheckedIn;
-	}
+	string getPlayerID() { return this->PlayerID; }
+	string getPlayerName() { return this->PlayerName; }
+	int getPlayerRating() { return this->PlayerRating; }
+	int getPlayerPriority() { return this->PlayerPriority; }
+	bool getCheckedInStatus() {	return this->isCheckedIn; }
 };
 
 // Match will need a team, team need 5 player
