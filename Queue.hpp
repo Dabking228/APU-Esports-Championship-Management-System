@@ -5,7 +5,7 @@ using namespace std;
 
 template <typename T> struct QueueNode {
 	QueueNode* prev = nullptr;
-	T type;
+	T* type;
 	QueueNode* next = nullptr;
 };
 
@@ -15,13 +15,13 @@ protected:
 	int size = 0;
 	int MAXSIZE = 0;
 
-	QueueNode<T>* createNewNode(T type) {
+	QueueNode<T>* createNewNode(T* type) {
 		QueueNode<T>* node = new QueueNode<T>();
 		node->type = type;
 		node->next = nullptr;
 		node->prev = nullptr;
 		return node;
-	}
+		}
 	QueueNode<T>* HEAD;
 	QueueNode<T>* TAIL;
 
@@ -39,7 +39,7 @@ public:
 		this->MAXSIZE = maxSize;
 	}
 
-	void enQueue(T type) {
+	void enQueue(T* type) {
 		QueueNode<T>* node = this->createNewNode(type);
 
 		if (HEAD == nullptr) {
@@ -55,7 +55,7 @@ public:
 	}
 
 	// This deQueue is only applied for the head of the queue
-	T deQueue() {
+	T* deQueue() {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
 		QueueNode<T>* current = nullptr;
@@ -73,10 +73,11 @@ public:
 		size--;
 
 		return current->type;
+		delete current;
 	}
 
 	// deQueue a specific item, put it into param
-	T deQueue(T type) {
+	T* deQueue(T type) {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
 		QueueNode<T>* current, *currPrev, *currNext = nullptr;
@@ -111,14 +112,15 @@ public:
 		size--;
 
 		return current->type;
+		delete current;
 	}
 
-	T front() {
+	T* front() {
 		return HEAD->type;
 	}
 
 
-	void listQueue(function<string (T)> func) {
+	void listQueue(function<string (T*)> func) {
 		QueueNode<T>* temp = HEAD;
 
 		while (temp != nullptr) {
