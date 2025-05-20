@@ -6,17 +6,17 @@ using namespace std;
 // Player Structure
 class Player {
 private:
-	string PlayerID;
+	int PlayerID;
 	string PlayerName;
-	int PlayerRating;
-	int PlayerPriority;
-	bool isCheckedIn;
+	int PlayerRating = 0;
+	int PlayerPriority = 0;
+	bool isCheckedIn = false;
 
 
 public:
 	Player() { }
 
-	Player(string PlayerID, string PlayerName, int PlayerRating, int PlayerPriority) {
+	Player(int PlayerID, string PlayerName, int PlayerRating, int PlayerPriority) {
 		this->isCheckedIn = false;
 		this->PlayerID = PlayerID;
 		this->PlayerName = PlayerName;
@@ -29,10 +29,8 @@ public:
 
 	// Normal function goes above here
 
-	/* 
-	Getter and Setter
-	*/
-	string getPlayerID() { return this->PlayerID; }
+	//Getter and Setter
+	int getPlayerID() { return this->PlayerID; }
 	string getPlayerName() { return this->PlayerName; }
 	int getPlayerRating() { return this->PlayerRating; }
 	int getPlayerPriority() { return this->PlayerPriority; }
@@ -41,19 +39,23 @@ public:
 
 // Match will need a team, team need 5 player
 // once match end, need to have a way to show the game logs and performance
+// have public and private team
 class Team {
 	string TeamName;
 
 private:
 	const int MAXLENGTH = 5;
 	int currentLength = 0;
-	Player* PlayerList = new Player[5];
-	int TeamRating;
+	Player** PlayerList = new Player*[MAXLENGTH];
+	int TeamRating = 0;
+
+	Player* Captain = nullptr;
+	bool isPrivate = false;
 
 	void updateRating() {
 		int tempRating = 0;
 		for (int i = 0; i < currentLength; i++) {
-			tempRating += PlayerList[i].getPlayerRating();
+			tempRating += PlayerList[i]->getPlayerRating();
 		}
 		this->TeamRating = tempRating / currentLength;
 	}
@@ -62,18 +64,36 @@ public:
 	Team() {}
 	Team(string TeamName) {
 		this->TeamName = TeamName;
-		this->TeamRating = 0;
 	}
 
-	void setPlayer(Player player) {
-		if (currentLength == MAXLENGTH) {
-			cout << "Team is full" << endl;
-			return;
-		}
-		PlayerList[currentLength] = player;
-		updateRating();
-		currentLength++;
+	Team(string TeamName, Player* Captain) {
+		this->TeamName = TeamName;
+		this->Captain = Captain;
+		this->isPrivate = true;
 	}
+
+
+	void addPlayer(Player* player) {
+		if (currentLength == MAXLENGTH) { cout << "Team is Full" << endl; return; }
+		if (isPrivate) { cout << "Team is private, Please include Captain in Params" << endl; return; }
+
+		PlayerList[currentLength] = player;
+		currentLength++;
+
+		updateRating();
+	}
+
+	void addPlayer(Player* player, Player* Captain) {
+		if (currentLength == MAXLENGTH) { cout << "Team is Full" << endl; return; }
+		if (isPrivate && player == Captain) { cout << "Captain cannot be added into Player" << endl; return; }
+		
+		PlayerList[currentLength] = player;
+		currentLength++;
+
+		updateRating();
+	}
+
+	int getTeamRating() { return this->TeamRating; }
 };
 
 
@@ -84,12 +104,24 @@ private:
 	string MatchName;
 	string Time;
 
-	Team* Team1;
-	Team* Team2;
+	Player* P1;
+	Player* P2;
+	
+	int scoreP1 = 0;
+	int scoreP2 = 0;
 
-	bool isFinish;
+	bool isFinish = false;
 
 public:
+	Match() {}
+	Match(string ID, string name, string time) { this->MatchID = ID; this->MatchName = name; this->Time = time; }
+
+
+
+
+	string getMatchID() { return this->MatchID; }
+	string getMatchName() { return this->MatchName; }
+	string getTime() { return this->Time; }
 };
 
 
@@ -114,4 +146,10 @@ private:
 	int ViewerPriority;
 
 public:
+};
+
+template <typename T> struct Node {
+	Node* prev = nullptr;
+	T* type;
+	Node* next = nullptr;
 };
