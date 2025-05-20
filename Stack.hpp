@@ -43,7 +43,7 @@ public:
 		return TAIL->type;
 	}
 
-	void push(T type) {
+	void push(T* type) {
 		if (size >= MAXSIZE) { cout << "Stack is full;" << endl;return; }
 
 		StackNode* node = createNewNode(type);
