@@ -123,11 +123,13 @@ public:
 		delete current;
 	}
 
-	T* front() {
+	T* peek() {
 		return HEAD->type;
 	}
 
-
+	/* uses lambda code to print any data
+	* For example [](Type* t){return string;}
+	*/ 
 	void listQueue(function<string (T*)> func) {
 		QueueNode* temp = HEAD;
 
@@ -146,6 +148,10 @@ public:
 	}
 	int getQueueLength() {return size;}
 
+	/* uses lambda to search for the data, and return the data
+	* pass into data, and uses lambda.
+	* For example [](Type* t, string data){return bool;}
+	*/
 	T* getData(string data, function<bool (T*, string)> func) {
 		QueueNode* temp = HEAD;
 
