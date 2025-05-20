@@ -130,10 +130,12 @@
     <ClCompile Include="QueNSta.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PlayerRegister.hpp" />
     <ClInclude Include="PriorityQueue.hpp" />
     <ClInclude Include="Queue.hpp" />
     <ClInclude Include="Stack.hpp" />
     <ClInclude Include="structure.hpp" />
+    <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

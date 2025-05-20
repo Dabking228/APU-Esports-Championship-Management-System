@@ -1,73 +1,106 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "structure.hpp"
 #include "Queue.hpp"
 #include "PriorityQueue.hpp"
-
+#include "Stack.hpp"
+#include "PlayerRegister.hpp"
 using namespace std;
 
+string dummyPlayerLoct = "./data/Player.csv";
+string dummyPlayer[12][4] = { {} };
+int MAXROWplayer = 12;
+int MAXCOLplayer = 4;
+
 //Stacks, Queues, Priority Queues, and Circular Queues
+void init() {
+	ifstream file(dummyPlayerLoct);
+	string line;
+	int row = 0;
 
-// {PlayerID, PlayerName, PlayerRating, Priority}
-string PLAYER_SAMPLE_LIST[][4] = {
-	{"10001", "Test 1", "10000", "3"},
-	{"10002", "Test 2", "10200", "2"},
-	{"10003", "Test 3", "12033", "1"},
-	{"10004", "Test 4", "12321", "1"},
-	{"10005", "Test 5", "25433", "3"},
-	{"10006", "Test 6", "54312", "2"},
-	{"10007", "Test 7", "55643", "2"},
-};
+	while (getline(file, line) && row < MAXROWplayer) {
+		stringstream ss(line);
+		string cell;
+		int col = 0;
 
+		while (getline(ss, cell, ',') && col < MAXCOLplayer) {
+			dummyPlayer[row][col] = cell;
+			col++;
+			if (col == 3) {
+				cout << cell << endl;
+			}
+			
+		}
 
+		row++;
 
-int main() {
-	//Queue<Player> temp = Queue<Player>("NAME GOES HERE");
-
-
-	//for (int i = 0; i < (sizeof(PLAYER_SAMPLE_LIST) / sizeof(PLAYER_SAMPLE_LIST[0])); i++) {
-	//	temp.enQueue(
-	//		Player(PLAYER_SAMPLE_LIST[i][0], PLAYER_SAMPLE_LIST[i][1], stoi(PLAYER_SAMPLE_LIST[i][2]), stoi(PLAYER_SAMPLE_LIST[i][3]))
-	//	);
-	//}
-
-	//temp.listQueue([](Player p) -> string {return p.getPlayerName(); });
-	//cout << temp.front().getPlayerName() << endl;
-
-	PriorityQueue<Player> Ptemp = PriorityQueue<Player>("P NAme goes here");
-	for (int i = 0; i < (sizeof(PLAYER_SAMPLE_LIST) / sizeof(PLAYER_SAMPLE_LIST[0])); i++) {
-		Ptemp.enQueue(
-			Player(PLAYER_SAMPLE_LIST[i][0], PLAYER_SAMPLE_LIST[i][1], stoi(PLAYER_SAMPLE_LIST[i][2]), stoi(PLAYER_SAMPLE_LIST[i][3])),
-			[](Player p1, Player p2) -> bool {return p1.getPlayerPriority() < p2.getPlayerPriority();}
-		);
-		Ptemp.listQueue([](Player p) -> string {return p.getPlayerName() + " | " + to_string(p.getPlayerPriority()); });
-		cout << endl;
 	}
 
 }
 
 
-//int main() {
-//	Queue<int> temp = Queue<int>("Hello world");
-//
-//	temp.enQueue(20);
-//	temp.enQueue(40);
-//	temp.enQueue(60);
-//	temp.enQueue(100);
-//	temp.enQueue(120);
-//
-//
-//	temp.listQueue();
-//
-//	cout << endl;
-//	cout << temp.deQueue() << endl;
-//	temp.listQueue();
-//
-//	cout << endl;
-//	cout << temp.deQueue(60) << endl;
-//	temp.listQueue();
-//
-//	cout << temp.getQueueLength() << endl;
-//	
-//
-//	return 0;
-//}
+Player** dataPlayer = new Player*[12];
+int numPlayer = 0;
+
+// add registere for player, register player will be 1
+// add priority queue for register player
+// 1 - normal player, 2 - early-bird, 3 - captain
+// Player replacement only allow for public team
+// private team need to have captain, captain cannot play the game
+// Matchmaking based on team rating
+// Match flow ?
+// update rating ?
+
+
+int main() {
+	Queue<Player> registerPlayer = Queue<Player>("Register Player");
+	PriorityQueue<Player> checkInPlayer = PriorityQueue<Player>("Check In");
+
+	PlayerRegister reg = PlayerRegister(registerPlayer);
+	reg.openMenu();
+	
+	init();
+	for (int i = 0; i < (sizeof(dummyPlayer) / sizeof(dummyPlayer[0])); i++) {
+		dataPlayer[i] = new Player(stoi(dummyPlayer[i][0]),dummyPlayer[i][1],stoi(dummyPlayer[i][2]),stoi(dummyPlayer[i][3]));
+		numPlayer++;
+	}
+
+	for (int i = 0; i < numPlayer; i++) {
+		registerPlayer.enQueue(dataPlayer[i]);
+	}
+	
+	while (!registerPlayer.isEmpty()) {
+		checkInPlayer.enQueue(registerPlayer.deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority();});
+	}
+
+	checkInPlayer.listQueue([](Player* p) { return p->getPlayerName() + " | " + to_string(p->getPlayerRating()) + " | " + to_string(p->getPlayerPriority()) ; });
+
+	
+	// player register -> close player register [ move register player into check-in ] -> add player from dummy -> [start check-in] 
+	// -> player not yet arrive? -> dequeue and requeue -> player arrived? -> dequeue
+
+	// Player withdraw? -> check team -> public? -> slot another player in from queue -> private -> slot another player with Captain info
+
+
+
+	//Team T1 = Team("T1");
+	//Team T2 = Team("T2");
+
+	//T1.addPlayer(QuePlayer.deQueue());
+	//T1.addPlayer(QuePlayer.deQueue());
+	//T1.addPlayer(QuePlayer.deQueue());
+	//T1.addPlayer(QuePlayer.deQueue());
+	//T1.addPlayer(QuePlayer.deQueue());
+	//T2.addPlayer(QuePlayer.deQueue());
+	//T2.addPlayer(QuePlayer.deQueue());
+	//T2.addPlayer(QuePlayer.deQueue());
+	//T2.addPlayer(QuePlayer.deQueue());
+	//T2.addPlayer(QuePlayer.deQueue());
+
+	//cout << T1.getTeamRating() << endl;
+	//cout << T2.getTeamRating() << endl;
+	
+
+}
+
