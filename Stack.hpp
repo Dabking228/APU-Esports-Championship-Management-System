@@ -4,15 +4,13 @@ using namespace std;
 
 template <typename T> class Stack {
 
-
-private:
 	struct StackNode {
 		StackNode* prev;
 		T* type;
 		StackNode* next;
 	};
 
-	StackNode* createNewNode(T type) {
+	StackNode* createNewNode(T* type) {
 		StackNode* node = new StackNode();
 		node->prev = nullptr;
 		node->type = type;
@@ -41,10 +39,13 @@ public:
 	}
 
 	T* peek() {
+		if(isEmpty()){ cout << "Stack is empty! Peak Failed" << endl; return nullptr; }
 		return TAIL->type;
 	}
 
 	void push(T type) {
+		if (size >= MAXSIZE) { cout << "Stack is full;" << endl;return; }
+
 		StackNode* node = createNewNode(type);
 
 		if (HEAD == nullptr) {
@@ -53,27 +54,33 @@ public:
 		else {
 			TAIL->next = node;
 			node->prev = TAIL;
-			TAIL = node
+			TAIL = node;
 		}
 
 		size++;
 	}
 
 	T* pop() {
-		if (HEAD == nullptr || TAIL == nullptr) { cout << "Stack is empty!" << endl; return nullptr; }
+		if (this->isEmpty()) { cout << "Stack is empty!" << endl; return nullptr; }
 
 		StackNode* curr = TAIL;
-		TAIL = TAIL->prev;
-		curr->next = nullptr;
+		T* val = curr->type;
+
+		if (HEAD == TAIL) {
+			HEAD = TAIL = nullptr;
+		}
+		else {
+			TAIL = TAIL->prev;
+			TAIL->next = nullptr;
+		}
+
+		// reduce size and delete node
 		size--;
-
-		return curr->type;
 		delete curr;
+
+		return val;
 	}
 
-	bool isEmpty() {
-		if ((HEAD == nullptr || TAIL == nullptr) && size = > 0) { return true; }
-	}
-		
+	bool isEmpty() { if (size == 0) return true; }
 	int getStackLength() { return size; }
 };
