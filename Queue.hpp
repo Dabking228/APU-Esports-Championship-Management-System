@@ -17,9 +17,9 @@ protected:
 
 	QueueNode<T>* createNewNode(T* type) {
 		QueueNode<T>* node = new QueueNode<T>();
+		node->prev = nullptr;
 		node->type = type;
 		node->next = nullptr;
-		node->prev = nullptr;
 		return node;
 		}
 	QueueNode<T>* HEAD;
@@ -132,16 +132,8 @@ public:
 		cout << "Queue End" << endl;
 	}
 
-	bool isEmpty() {
-		if (HEAD == nullptr && TAIL == nullptr) {
-			return true;
-		}
-		else { return false; }
-	}
-
-	int getQueueLength() {
-		return size;
-	}
+	bool isEmpty() { if (size == 0) return true; }
+	int getQueueLength() {return size;}
 
 
 	/*
