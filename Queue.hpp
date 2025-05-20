@@ -80,8 +80,9 @@ public:
 	}
 
 	// deQueue a specific item, put it into param
-	T* deQueue(T type) {
-		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
+	T* deQueue(T* type) {
+		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return nullptr; }
+		if (type == nullptr) { cout << "Provided a nullptr! Will not proceed to deQueue" << endl; return nullptr; }
 
 		QueueNode* current, *currPrev, *currNext = nullptr;
 		current = HEAD;
@@ -92,8 +93,12 @@ public:
 			current = current->next;
 		}
 
+		// if the queue is only one node, and remove that one node
+		if (current->next == nullptr && current->prev == nullptr) {
+			HEAD = TAIL = nullptr;
+		}
 		// if the pass-in type is the for the last node
-		if (current->next == nullptr) {
+		else if (current->next == nullptr) {
 			TAIL = current->prev;
 			TAIL->next = nullptr;
 		}
@@ -128,7 +133,7 @@ public:
 
 		while (temp != nullptr) {
 
-			cout << "Queue " + QueueName + ": " << func(temp->type) << endl;
+			cout << func(temp->type) << endl;
 			temp = temp->next;
 		}
 
@@ -141,6 +146,22 @@ public:
 	}
 	int getQueueLength() {return size;}
 
+	T* getData(string data, function<bool (T*, string)> func) {
+		QueueNode* temp = HEAD;
+
+		while (temp != nullptr) {
+			if (func(temp->type, data)) {
+				return temp->type;
+			}
+			temp = temp->next;
+		}
+
+		if (temp == nullptr) {
+			cout << "Cannot get Data from provided Data" << endl;
+			return nullptr;
+		}
+	
+	}
 
 	/*
 	Unused code
