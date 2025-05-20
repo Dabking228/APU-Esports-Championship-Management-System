@@ -43,10 +43,9 @@ public:
 						this->TAIL = node;
 						compare = false;
 					}
-				} while (compare);
-
-				
+				} while (compare);			
 			}
-		};
+		}
+		this->size++;
 	}
 };
