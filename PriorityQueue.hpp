@@ -1,45 +1,46 @@
 #pragma once
-#include <iostream>
 #include "Queue.hpp"
+#include <iostream>
 using namespace std;
 
-template <typename T> class PriorityQueue : public Queue<T>{
+template <typename T> class PriorityQueue : public Queue<T> {
 
 public:
-	PriorityQueue(){}
+	PriorityQueue() : Queue<T>() {}
 
-	PriorityQueue(string name){
-		Queue<T>::QueueName = name;
-	}
+	PriorityQueue(string name) : Queue<T>(name) {};
 
-	void enQueue(T type, function<bool(T,T)> func) {
-		QueueNode<T>* node = Queue<T>::createNewNode(type);
-		
-		if (Queue<T>::HEAD == nullptr) {
-			Queue<T>::HEAD = Queue<T>::TAIL = node;
+	PriorityQueue(string name, int maxSize) : Queue<T>(name, maxSize) {};
+
+	void enQueue(T* type, function<bool(T*,T*)> func) {
+		typename Queue<T>::QueueNode* node = this->createNewNode(type);
+
+		if (this->HEAD == nullptr) {
+			this->HEAD= this->TAIL = node;
 		}
 		else {
-			if (Queue<T>::HEAD->next == nullptr) {
-				Queue<T>::HEAD->next = node;
-				node->prev = Queue<T>::HEAD;
-				Queue<T>::TAIL = node;
+			if (this->HEAD->next == nullptr) {
+				this->HEAD->next = node;
+				node->prev = this->HEAD;
+				this->TAIL = node;
 			}
 			else {
 				bool compare = true;
-				QueueNode<T>* curr = Queue<T>::HEAD;
+				typename Queue<T>::QueueNode* curr = this->HEAD;
 				do {
 					if (func(curr->type, node->type)) {
 						node->next = curr;
 						node->prev = curr->prev;
-						curr->prev->next = node;
+						if (curr->prev != nullptr) { curr->prev->next = node; }
+						else { this->HEAD = node; }
 						curr->prev = node;
 						compare = false;
 					}
 					curr = curr->next;
 					if (curr == nullptr) {
-						Queue<T>::TAIL->next = node;
-						node->prev = Queue<T>::TAIL;
-						Queue<T>::TAIL = node;
+						this->TAIL->next = node;
+						node->prev = this->TAIL;
+						this->TAIL = node;
 						compare = false;
 					}
 				} while (compare);
