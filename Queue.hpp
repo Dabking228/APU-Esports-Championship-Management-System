@@ -3,27 +3,30 @@
 #include <functional>
 using namespace std;
 
-template <typename T> struct QueueNode {
-	QueueNode* prev = nullptr;
-	T* type;
-	QueueNode* next = nullptr;
-};
+
 
 template <typename T> class Queue {
 protected:
+	struct QueueNode {
+		QueueNode* prev = nullptr;
+		T* type;
+		QueueNode* next = nullptr;
+	};
+
+
 	string QueueName;
-	int size = 0;
+	int size = 0; 
 	int MAXSIZE = 0;
 
-	QueueNode<T>* createNewNode(T* type) {
-		QueueNode<T>* node = new QueueNode<T>();
+	QueueNode* createNewNode(T* type) {
+		QueueNode* node = new QueueNode();
 		node->prev = nullptr;
 		node->type = type;
 		node->next = nullptr;
 		return node;
-		}
-	QueueNode<T>* HEAD;
-	QueueNode<T>* TAIL;
+	}
+	QueueNode* HEAD;
+	QueueNode* TAIL;
 
 public:
 	Queue () {}
@@ -40,7 +43,7 @@ public:
 	}
 
 	void enQueue(T* type) {
-		QueueNode<T>* node = this->createNewNode(type);
+		QueueNode* node = this->createNewNode(type);
 
 		if (HEAD == nullptr) {
 			HEAD = TAIL = node;
@@ -58,7 +61,7 @@ public:
 	T* deQueue() {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
-		QueueNode<T>* current = nullptr;
+		QueueNode* current = nullptr;
 		current = HEAD;
 		HEAD = current->next;
 		if (HEAD == nullptr) {
@@ -80,7 +83,7 @@ public:
 	T* deQueue(T type) {
 		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return NULL; }
 
-		QueueNode<T>* current, *currPrev, *currNext = nullptr;
+		QueueNode* current, *currPrev, *currNext = nullptr;
 		current = HEAD;
 		while (true) {
 			if (current->type == type) {
@@ -121,18 +124,21 @@ public:
 
 
 	void listQueue(function<string (T*)> func) {
-		QueueNode<T>* temp = HEAD;
+		QueueNode* temp = HEAD;
 
 		while (temp != nullptr) {
 
-			cout << "Queue: " << func(temp->type) << endl;
+			cout << "Queue " + QueueName + ": " << func(temp->type) << endl;
 			temp = temp->next;
 		}
 
 		cout << "Queue End" << endl;
 	}
 
-	bool isEmpty() { if (size == 0) return true; }
+	bool isEmpty() {
+		if (size == 0) { return true; }
+		else { return false; }
+	}
 	int getQueueLength() {return size;}
 
 
