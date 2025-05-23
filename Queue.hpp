@@ -128,14 +128,13 @@ public:
 	}
 
 	/* uses lambda code to print any data
-	* For example [](Type* t){return string;}
+	* For example [](Type* t){ cout << " the data directly" << endl; }
 	*/ 
-	void listQueue(function<string (T*)> func) {
+	void listQueue(function<void (T*)> func) {
 		QueueNode* temp = HEAD;
 
 		while (temp != nullptr) {
-
-			cout << func(temp->type) << endl;
+			func(temp->type);
 			temp = temp->next;
 		}
 
