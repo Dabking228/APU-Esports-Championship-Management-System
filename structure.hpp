@@ -1,12 +1,13 @@
 #pragma once
 #include <sstream>
 #include <iostream>
+#include <functional>
 using namespace std;
 
 // Player Structure
 class Player {
 private:
-	int PlayerID;
+	int PlayerID = 0;
 	string PlayerName;
 	int PlayerRating = 0;
 	int PlayerPriority = 0;
@@ -24,9 +25,6 @@ public:
 		this->PlayerPriority = PlayerPriority;
 	}
 
-
-
-
 	// Normal function goes above here
 
 	//Getter and Setter
@@ -35,22 +33,27 @@ public:
 	int getPlayerRating() { return this->PlayerRating; }
 	int getPlayerPriority() { return this->PlayerPriority; }
 	bool getCheckedInStatus() {	return this->isCheckedIn; }
+	void toogleCheckIn() { this->isCheckedIn = !this->isCheckedIn; }
 };
 
 // Match will need a team, team need 5 player
 // once match end, need to have a way to show the game logs and performance
 // have public and private team
-class Team {
-	string TeamName;
+// PLANNED TO SCRAP TEAM BASED MATCHMAKING
 
+class Team {
 private:
+	string TeamName;
+	int TeamRating = 0;
 	const int MAXLENGTH = 5;
 	int currentLength = 0;
 	Player** PlayerList = new Player*[MAXLENGTH];
-	int TeamRating = 0;
 
-	Player* Captain = nullptr;
-	bool isPrivate = false;
+	const int MAXTOLERANCE = 4000;
+	int TOLERANCE = 0;
+	int LOWERBOUND = 0;
+	int HIGHERBOUND = 0;
+	
 
 	void updateRating() {
 		int tempRating = 0;
@@ -58,42 +61,56 @@ private:
 			tempRating += PlayerList[i]->getPlayerRating();
 		}
 		this->TeamRating = tempRating / currentLength;
+		this->TOLERANCE = (currentLength * MAXTOLERANCE) / (MAXLENGTH - 1);
+		this->LOWERBOUND = TeamRating - TOLERANCE;
+		this->HIGHERBOUND = TeamRating + TOLERANCE;
 	}
 
 public:
+
 	Team() {}
 	Team(string TeamName) {
 		this->TeamName = TeamName;
 	}
 
-	Team(string TeamName, Player* Captain) {
-		this->TeamName = TeamName;
-		this->Captain = Captain;
-		this->isPrivate = true;
-	}
-
-
-	void addPlayer(Player* player) {
-		if (currentLength == MAXLENGTH) { cout << "Team is Full" << endl; return; }
-		if (isPrivate) { cout << "Team is private, Please include Captain in Params" << endl; return; }
+	bool addPlayer(Player* player) {
+		if (currentLength == MAXLENGTH) { 
+			//cout << "Team is Full" << endl; 
+			return false; }
+		if ((player->getPlayerRating() < LOWERBOUND || player->getPlayerRating() > HIGHERBOUND) && currentLength != 0) {
+			//cout << "Player is not within the Bound." << endl;
+			return false;
+		}
 
 		PlayerList[currentLength] = player;
 		currentLength++;
 
 		updateRating();
+		return true;
 	}
 
-	void addPlayer(Player* player, Player* Captain) {
-		if (currentLength == MAXLENGTH) { cout << "Team is Full" << endl; return; }
-		if (isPrivate && player == Captain) { cout << "Captain cannot be added into Player" << endl; return; }
-		
-		PlayerList[currentLength] = player;
-		currentLength++;
+	// This function require the input be starting from 1
+	Player* getPlayer(int num){
+		if (num <= 0 || num > MAXLENGTH) { return nullptr; }
 
-		updateRating();
+		return PlayerList[num - 1];
+	}
+
+	void getTolerance() {
+		cout << "Tolerance: " << TOLERANCE << endl;
+		cout << "Lowewr: " << LOWERBOUND << " | Higher: " << HIGHERBOUND << endl;
+	}
+
+	void listAllPlayer(function<void (Player*)> func) {
+		for (int i = 1; i < currentLength + 1; i++) {
+			func(getPlayer(i));
+		}
 	}
 
 	int getTeamRating() { return this->TeamRating; }
+	int getCurrentPlayers() { return this->currentLength; }
+	int getMaxPlayers() { return MAXLENGTH; }
+	string getTeamName() { return TeamName; }
 };
 
 
