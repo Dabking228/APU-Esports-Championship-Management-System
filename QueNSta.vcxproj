@@ -135,6 +135,7 @@
     <ClInclude Include="Queue.hpp" />
     <ClInclude Include="Stack.hpp" />
     <ClInclude Include="structure.hpp" />
+    <ClInclude Include="TeamRegister.hpp" />
     <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

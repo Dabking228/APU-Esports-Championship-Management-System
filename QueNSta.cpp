@@ -5,6 +5,7 @@
 #include "Queue.hpp"
 #include "PriorityQueue.hpp"
 #include "Stack.hpp"
+#include "TeamRegister.hpp"
 #include "PlayerRegister.hpp"
 using namespace std;
 
@@ -43,21 +44,32 @@ void init() {
 Player** dataPlayer = new Player*[12];
 int numPlayer = 0;
 
-// add registere for player, register player will be 1
+
+// player max rating will be 16k lowest of 1000
+// add registere for player, register player priority will be 1
 // add priority queue for register player
-// 1 - normal player, 2 - early-bird, 3 - captain
+// 1 - normal player, 2 - early-bird, 3 - VIP
+// handle check-ins
+// max 8 teams (40 players)
+// max private team 4 teams
 // Player replacement only allow for public team
-// private team need to have captain, captain cannot play the game
 // Matchmaking based on team rating
 // Match flow ?
 // update rating ?
 
+const int MAXTEAM = 8;
+
+Queue<Player>* registerPlayer = new Queue<Player>("Register Player");
+PriorityQueue<Player>* checkInPlayer = new PriorityQueue<Player>("Check In");
+Stack<Player>* WaitingList = new Stack<Player>("Waiting List");
+Stack<Player>* AwaitingList = new Stack<Player>("Awaiting List");
+PriorityQueue<Team>* Teams = new PriorityQueue<Team>("Team Registed", MAXTEAM);
 
 int main() {
-	Queue<Player> registerPlayer = Queue<Player>("Register Player");
-	PriorityQueue<Player> checkInPlayer = PriorityQueue<Player>("Check In");
 
 	PlayerRegister reg = PlayerRegister(registerPlayer);
+	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
+	
 	reg.openMenu();
 	
 	init();
@@ -67,16 +79,20 @@ int main() {
 	}
 
 	for (int i = 0; i < numPlayer; i++) {
-		registerPlayer.enQueue(dataPlayer[i]);
+		registerPlayer->enQueue(dataPlayer[i]);
 	}
 	
-	while (!registerPlayer.isEmpty()) {
-		checkInPlayer.enQueue(registerPlayer.deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority();});
+	while (!registerPlayer->isEmpty()) {
+		checkInPlayer->enQueue(registerPlayer->deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority();});
 	}
 
-	checkInPlayer.listQueue([](Player* p) { return p->getPlayerName() + " | " + to_string(p->getPlayerRating()) + " | " + to_string(p->getPlayerPriority()) ; });
+	checkInPlayer->listQueue([](Player* p) { return p->getPlayerName() + " | " + to_string(p->getPlayerRating()) + " | " + to_string(p->getPlayerPriority()) ; });
 
-	
+	TeamReg.openMenu();
+
+	Teams->listQueue([](Team* t) { cout << t->getTeamName() << " | " << t->getTeamRating() << endl;});
+
+
 	// player register -> close player register [ move register player into check-in ] -> add player from dummy -> [start check-in] 
 	// -> player not yet arrive? -> dequeue and requeue -> player arrived? -> dequeue
 

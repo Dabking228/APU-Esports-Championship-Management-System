@@ -5,16 +5,17 @@
 #include "structure.hpp"
 using namespace std;
 
+extern const int MAXTEAM;
+
 class TeamRegister {
 private:
 	PriorityQueue<Player>* checkInQueue;
+	PriorityQueue<Team>* Teams;
 	Stack<Player>* WaitingList; // stack for playe that havent check in [check-in = false]
 	Stack<Player>* AwaitingList; // This stack is for player when they havent find a team [check-in = true]
 
-	int numOfTeam = 0;
-	int MAXTEAM = 8;
-	//int numOfPlayers = 0;
-	Team** Teams = new Team*[MAXTEAM];
+	int numOfTeam = 0; // remember to -1
+	Team** TeamsRegistered = new Team*[MAXTEAM];
 
 
 	bool isLoopMenu = true;
@@ -96,7 +97,7 @@ private:
 
 				cout << "Joined in " << team->getTeamName() << endl;
 
-				Teams[numOfTeam] = team;
+				TeamsRegistered[numOfTeam] = team;
 				numOfTeam++;
 				isInitTeam = false;
 			}
@@ -109,7 +110,7 @@ private:
 
 				// Loop Through team and slot the player into the team, if given rating is sufficein 
 				for (int i = 0; i < numOfTeam; i++) {
-					Team* team = Teams[i];
+					Team* team = TeamsRegistered[i];
 					joined = team->addPlayer(data);
 
 					if(joined){
@@ -124,7 +125,7 @@ private:
 					Player* dataAwait = AwaitingList->pop();
 					bool awaitJoined;
 					for (int i = 0; i < numOfTeam; i++) {
-						Team* team = Teams[i];
+						Team* team = TeamsRegistered[i];
 						awaitJoined = team->addPlayer(dataAwait);
 						if (awaitJoined) {
 							cout << "Player " << dataAwait->getPlayerName() << " join " << team->getTeamName() << endl;
@@ -145,7 +146,7 @@ private:
 
 					cout << "(2) Joined in " << newteam->getTeamName() << endl;
 
-					Teams[numOfTeam] = newteam;
+					TeamsRegistered[numOfTeam] = newteam;
 					numOfTeam++;
 					cout << "(2) Created a new team : " << numOfTeam << endl;
 				}
@@ -175,7 +176,7 @@ private:
 
 		for (int i = 0; i < numOfTeam; i++) {
 			ss << i;
-			cout << i+1 << ". " << Teams[i]->getTeamRating() << endl;
+			cout << i+1 << ". " << TeamsRegistered[i]->getTeamRating() << endl;
 		}
 
 		while (isLoop) {
@@ -197,15 +198,16 @@ private:
 			if (input >= 1 && input <= numOfTeam) {
 				cout << "--- Showing Team " << input << " ---" << endl;
 
-				for (int i = 1; i < Teams[input - 1]->getCurrentPlayers() + 1; i++) {
-					Player* p = Teams[input - 1]->getPlayer(i);
+				Team* team = TeamsRegistered[input - 1];
+				team->listAllPlayer(
+					[](Player* p) {
+						cout << "Name: " << p->getPlayerName() << endl;
+						cout << "Rating: " << p->getPlayerRating() << endl;
+						cout << "Status: " << p->getCheckedInStatus() << endl;
+					}
+				);
 
-					cout << "Name: " << p->getPlayerName() << endl;
-					cout << "Rating: " << p->getPlayerRating() << endl;
-					cout << "Status: " << p->getCheckedInStatus() << endl;
-					cout << "---" << endl;
-				}
-
+				cout << "---" << endl;
 				cout << "Press any to return." << endl;
 				cin.get();
 				cin.clear();
@@ -265,7 +267,7 @@ private:
 		// show all player from teams
 		cout << "--- Player in teams ---" << endl;
 		for (int i = 0; i < numOfTeam - 1; i++) {
-			Team* team = Teams[i];
+			Team* team = TeamsRegistered[i];
 			team->listAllPlayer(
 				[](Player* p) {
 					cout << p->getPlayerName() << " | " << p->getPlayerRating() << endl;
@@ -280,11 +282,20 @@ private:
 		cin.ignore(1, '\n');
 	}
 
+	void queueTeams() {
+		for (int i = 0; i < numOfTeam; i++) {
+			Team* team = TeamsRegistered[i];
+
+			Teams->enQueue(team, [](Team* t1, Team* t2) { return t1->getTeamRating() > t2->getTeamRating();}, true);
+		}
+	}
+
 public:
-	TeamRegister(PriorityQueue<Player> *Queue, Stack<Player> *WaitingList, Stack<Player> *AwaitingList) {
+	TeamRegister(PriorityQueue<Player> *Queue, Stack<Player> *WaitingList, Stack<Player> *AwaitingList, PriorityQueue<Team> *Teams) {
 		this->checkInQueue = Queue;
 		this->WaitingList = WaitingList;
 		this->AwaitingList = AwaitingList;
+		this->Teams = Teams;
 	}
 
 	void openMenu() {
@@ -302,7 +313,10 @@ public:
 			case 3:
 				checkTeams();
 				break;
-			case -1: isLoopMenu = false; break;
+			case -1: 
+				isLoopMenu = false; 
+				queueTeams();
+				break;
 			default: {
 				cout << "Please Select a correct input" << endl;
 				cin.clear();
