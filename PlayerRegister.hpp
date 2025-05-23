@@ -43,9 +43,10 @@ private:
 			cout << "Player Name: ";
 			cin >> name;
 			if (name == "-1") { break; }
-			cout << "Player Rating: ";
+			cout << "Player Rating (1000 ~ 16000): ";
 			cin >> rating;
 			if (rating == -1) { break; }
+			if (rating < 1000 || rating > 16000) { cout << "Rating to high/low. Please Register Again" << endl; break; }
 			cout << "Registered" << endl;
 			ID++;
 			registerQueue->enQueue(new Player(
@@ -121,9 +122,9 @@ private:
 	}
 
 public:
-	PlayerRegister(Queue<Player> &PlayerQueue) {
+	PlayerRegister(Queue<Player> *PlayerQueue) {
 		bool isFinish;
-		this->registerQueue = &PlayerQueue;
+		this->registerQueue = PlayerQueue;
 	}
 
 	void openMenu() {
