@@ -43,6 +43,8 @@ public:
 	}
 
 	void enQueue(T* type) {
+		if (size >= MAXSIZE && MAXSIZE != 0) { cout << "Queue is full;" << endl;return; }
+
 		QueueNode* node = this->createNewNode(type);
 
 		if (HEAD == nullptr) {
