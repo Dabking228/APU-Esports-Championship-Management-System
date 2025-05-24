@@ -22,7 +22,7 @@ template <typename T> class Stack {
 	string StackName;
 	StackNode* HEAD;
 	StackNode* TAIL;
-	int MAXSIZE = -1;
+	int MAXSIZE = 0;
 	int size = 0;
 
 public:
@@ -30,6 +30,10 @@ public:
 
 	Stack(string name) {
 		this->StackName = name;
+	}
+
+	Stack(int s) {
+		this->MAXSIZE = s;
 	}
 
 	Stack(string name, int size) {
@@ -43,7 +47,7 @@ public:
 	}
 
 	void push(T* type) {
-		if (size <= MAXSIZE) { cout << "Stack is full;" << endl;return; }
+		if (size >= MAXSIZE && MAXSIZE != 0) { cout << "Stack is full;" << endl;return; }
 
 		StackNode* node = createNewNode(type);
 
