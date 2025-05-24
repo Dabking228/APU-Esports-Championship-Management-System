@@ -282,11 +282,13 @@ private:
 		cin.ignore(1, '\n');
 	}
 
+
+	// TODO: fix sorting doesnt work
 	void queueTeams() {
 		for (int i = 0; i < numOfTeam; i++) {
 			Team* team = TeamsRegistered[i];
 
-			Teams->enQueue(team, [](Team* t1, Team* t2) { return t1->getTeamRating() > t2->getTeamRating();}, true);
+			Teams->enQueue(team, [](Team* t1, Team* t2) { return t1->getTeamRating() < t2->getTeamRating();}, true);
 		}
 	}
 

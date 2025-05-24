@@ -4,7 +4,21 @@
 using namespace std;
 
 template <typename T> class PriorityQueue : public Queue<T> {
+private:
+	bool checkUnique(T* type) {
+		typename Queue<T>::QueueNode* temp = this->HEAD;
 
+		while (temp != nullptr) {
+			
+			if (temp->type == type) {
+				return true;
+			}
+
+			temp = temp->next;
+		}
+
+		return false;
+	}
 public:
 	PriorityQueue() : Queue<T>() {}
 
@@ -20,15 +34,25 @@ public:
 		}
 		else {
 			if (this->HEAD->next == nullptr) {
-				this->HEAD->next = node;
-				node->prev = this->HEAD;
-				this->TAIL = node;
+				typename Queue<T>::QueueNode* curr = this->HEAD;
+				if (func(node->type, this->HEAD->type)) {
+					this->HEAD = node;
+					node->next = curr;
+					curr->prev = node;
+					this->TAIL = curr;
+				}
+				else {
+					this->HEAD->next = node;
+					node->prev = this->HEAD;
+					this->TAIL = node;
+				}
+
 			}
 			else {
 				bool compare = true;
 				typename Queue<T>::QueueNode* curr = this->HEAD;
 				do {
-					if (func(curr->type, node->type)) {
+					if (func(node->type, curr->type)) {
 						node->next = curr;
 						node->prev = curr->prev;
 						if (curr->prev != nullptr) { curr->prev->next = node; }
@@ -37,7 +61,7 @@ public:
 						compare = false;
 					}
 					curr = curr->next;
-					if (curr == nullptr) {
+					if (curr == nullptr && compare) {
 						this->TAIL->next = node;
 						node->prev = this->TAIL;
 						this->TAIL = node;
@@ -47,5 +71,13 @@ public:
 			}
 		}
 		this->size++;
+	}
+
+	void enQueue(T* type, function<bool(T*, T*)> func, bool isUnique) {
+		if (isUnique == false) { this->enQueue(type, func);  }
+
+		if (checkUnique(type)) { cout << "couldnt add to queue" << endl; return; }
+
+		this->enQueue(type, func);
 	}
 };
