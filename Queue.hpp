@@ -123,6 +123,40 @@ public:
 		delete current;
 	}
 
+	// deQueue by index
+	T* deQueue(int index) {
+		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return nullptr; }
+		if (index < 0 || index > this->getQueueLength()) { return nullptr; }
+
+		QueueNode* current = nullptr;
+		current = HEAD;
+		int calc = 1;
+		if (index > 0 && index > 1) {
+			do {
+				current = current->next;
+				calc++;
+			} while (index != calc);
+		}
+		if (index == 1) { current = current->next; }
+
+
+		if(index == 0) { HEAD = current->next; }
+
+		if (HEAD == nullptr) {
+			TAIL = nullptr;
+		}
+		else {
+			HEAD->prev = nullptr;
+		}
+
+		current->next = nullptr;
+		current->prev = nullptr;
+		size--;
+
+		return current->type;
+		delete current;
+	}
+
 	T* peek() {
 		return HEAD->type;
 	}
@@ -168,23 +202,6 @@ public:
 	
 	}
 
-	/*
-	Unused code
-	Part of unused code due to adding new stuff into it.
-	keep this as a point of reference
-	
-	void listQueue() {
-		QueueNode* temp = HEAD;
-
-		while (temp != nullptr) {
-			cout << "Queue: " << temp->type << endl;
-			temp = temp->next;
-		}
-
-		cout << "Queue End" << endl;
-	}
-
-	*/
 
 
 
