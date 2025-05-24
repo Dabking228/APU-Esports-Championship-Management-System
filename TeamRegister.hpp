@@ -129,6 +129,7 @@ private:
 						awaitJoined = team->addPlayer(dataAwait);
 						if (awaitJoined) {
 							cout << "Player " << dataAwait->getPlayerName() << " join " << team->getTeamName() << endl;
+							break;
 						}
 					}
 
@@ -162,6 +163,7 @@ private:
 			isInitTeam = true;
 		} while (!isExit);
 
+		this->requeuePlayer();
 		return;
 	}
 
@@ -248,7 +250,7 @@ private:
 		}
 
 		// show all player from waitinglsit
-		cout << "-- Player in Waiting List ---" << endl;
+		cout << "--- Player in Waiting List ---" << endl;
 		if (!WaitingList->isEmpty()) {
 			Stack<Player> temp = Stack<Player>();
 
@@ -268,6 +270,7 @@ private:
 		cout << "--- Player in teams ---" << endl;
 		for (int i = 0; i < numOfTeam - 1; i++) {
 			Team* team = TeamsRegistered[i];
+			cout << "--- " << team->getTeamName() << " ---" << endl;
 			team->listAllPlayer(
 				[](Player* p) {
 					cout << p->getPlayerName() << " | " << p->getPlayerRating() << endl;
@@ -282,8 +285,6 @@ private:
 		cin.ignore(1, '\n');
 	}
 
-
-	// TODO: fix sorting doesnt work
 	void queueTeams() {
 		for (int i = 0; i < numOfTeam; i++) {
 			Team* team = TeamsRegistered[i];
@@ -330,6 +331,60 @@ public:
 
 		}
 
+	}
+
+	void requeuePlayer() {
+		if (AwaitingList->isEmpty()) { cout << "Awaiting list is empty" << endl; return; }
+
+		bool isMatching = true;
+		int iterate = 0;
+		int MaxIterate = 3;
+		Stack<Player> tempStack = Stack<Player>();
+
+		while (isMatching) {
+			while (!AwaitingList->isEmpty()) {
+				Player* p = AwaitingList->pop();
+				bool joined = false;
+
+				for (int i = 0; i < numOfTeam; i++) {
+					Team* t = TeamsRegistered[i];
+
+					joined = t->addPlayer(p);
+					if (joined) { break; }
+				}
+
+				if (!joined) { tempStack.push(p); }
+			}
+
+			while (!tempStack.isEmpty()) {
+				Player* tp = tempStack.pop();
+				bool joined = false;
+
+				for (int i = 0; i < numOfTeam; i++) {
+					Team* t = TeamsRegistered[i];
+
+					joined = t->addPlayer(tp);
+					if (joined) { break; }
+				}
+
+				if (!joined) { AwaitingList->push(tp); }
+			}
+
+			iterate++;
+			
+			bool isFull = true;
+			for (int i = 0; i < numOfTeam; i++) {
+				Team* t = TeamsRegistered[i];
+
+				if (!t->isTeamFull()) {
+					isFull = false;
+					break;
+				}
+			}
+
+			if (iterate >= 3 || isFull) { isMatching = false; }
+
+		}
 	}
 
 };
