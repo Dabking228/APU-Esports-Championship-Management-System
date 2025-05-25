@@ -67,7 +67,12 @@ private:
 	}
 
 public:
-
+	~Team() {
+		for (int i = 0; i < currentLength; i++) {
+			delete PlayerList[i];
+		}
+		delete[] PlayerList;
+	}
 	Team() {}
 	Team(string TeamName) {
 		this->TeamName = TeamName;
@@ -102,45 +107,20 @@ public:
 	}
 
 	void listAllPlayer(function<void (Player*)> func) {
+		cout << "debug: " << this->getTeamName()<< endl;
 		for (int i = 1; i < currentLength + 1; i++) {
+
 			func(getPlayer(i));
 		}
 	}
 
+
+	bool isTeamFull() { if (currentLength == MAXLENGTH) { return true; } return false; }
 	int getTeamRating() { return this->TeamRating; }
 	int getCurrentPlayers() { return this->currentLength; }
 	int getMaxPlayers() { return MAXLENGTH; }
 	string getTeamName() { return TeamName; }
 };
-
-
-
-class Match{
-private:
-	string MatchID;
-	string MatchName;
-	string Time;
-
-	Player* P1;
-	Player* P2;
-	
-	int scoreP1 = 0;
-	int scoreP2 = 0;
-
-	bool isFinish = false;
-
-public:
-	Match() {}
-	Match(string ID, string name, string time) { this->MatchID = ID; this->MatchName = name; this->Time = time; }
-
-
-
-
-	string getMatchID() { return this->MatchID; }
-	string getMatchName() { return this->MatchName; }
-	string getTime() { return this->Time; }
-};
-
 
 // viewer can view the stream || need to create a struct for livestream??? || chat???
 
