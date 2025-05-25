@@ -139,11 +139,20 @@ public:
 				calc++;
 			} while (index != calc);
 		}
-		if (index == 1) { current = current->next; }
+
+		if (index == 1) { 
+			current = HEAD; 
+			HEAD = nullptr;
+		}
 
 
 		if(index == 0) { HEAD = current->next; }
 
+		if (current->next == nullptr && index > 1) { 
+			TAIL = current->prev; 
+			current->prev->next = nullptr; 
+		}
+		
 		if (HEAD == nullptr) {
 			TAIL = nullptr;
 		}
