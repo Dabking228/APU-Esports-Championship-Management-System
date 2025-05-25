@@ -7,12 +7,13 @@
 #include "Stack.hpp"
 #include "TeamRegister.hpp"
 #include "PlayerRegister.hpp"
+#include "MatchDashboard.hpp"
 using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
-string dummyPlayer[12][4] = { {} };
-int MAXROWplayer = 12;
-int MAXCOLplayer = 4;
+const int MAXROWplayer = 100;
+const int MAXCOLplayer = 4;
+string dummyPlayer[MAXROWplayer][MAXCOLplayer] = { {} };
 
 //Stacks, Queues, Priority Queues, and Circular Queues
 void init() {
@@ -41,21 +42,19 @@ void init() {
 }
 
 
-Player** dataPlayer = new Player*[12];
+Player** dataPlayer = new Player*[MAXROWplayer];
 int numPlayer = 0;
 
 
 // player max rating will be 16k lowest of 1000
 // add registere for player, register player priority will be 1
 // add priority queue for register player
-// 1 - normal player, 2 - early-bird, 3 - VIP
-// handle check-ins
-// max 8 teams (40 players)
-// max private team 4 teams
-// Player replacement only allow for public team
+// 1 - normal player, 2 - early-bir
+// 
+// max ptrof2 teams 
+// 
 // Matchmaking based on team rating
-// Match flow ?
-// update rating ?
+
 
 const int MAXTEAM = 8;
 
@@ -65,10 +64,14 @@ Stack<Player>* WaitingList = new Stack<Player>("Waiting List");
 Stack<Player>* AwaitingList = new Stack<Player>("Awaiting List");
 PriorityQueue<Team>* Teams = new PriorityQueue<Team>("Team Registed", MAXTEAM);
 
+
+
 int main() {
+	if (!isPowerOfTwo(MAXTEAM)) { cout << "Team size must be pwr of 2" << endl; return 0; }
 
 	PlayerRegister reg = PlayerRegister(registerPlayer);
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
+	MatchDashboard MatchDash = MatchDashboard(Teams);
 	
 	reg.openMenu();
 	
@@ -92,31 +95,8 @@ int main() {
 
 	Teams->listQueue([](Team* t) { cout << t->getTeamName() << " | " << t->getTeamRating() << endl;});
 
+	MatchDash.openMenu();
 
-	// player register -> close player register [ move register player into check-in ] -> add player from dummy -> [start check-in] 
-	// -> player not yet arrive? -> dequeue and requeue -> player arrived? -> dequeue
-
-	// Player withdraw? -> check team -> public? -> slot another player in from queue -> private -> slot another player with Captain info
-
-
-
-	//Team T1 = Team("T1");
-	//Team T2 = Team("T2");
-
-	//T1.addPlayer(QuePlayer.deQueue());
-	//T1.addPlayer(QuePlayer.deQueue());
-	//T1.addPlayer(QuePlayer.deQueue());
-	//T1.addPlayer(QuePlayer.deQueue());
-	//T1.addPlayer(QuePlayer.deQueue());
-	//T2.addPlayer(QuePlayer.deQueue());
-	//T2.addPlayer(QuePlayer.deQueue());
-	//T2.addPlayer(QuePlayer.deQueue());
-	//T2.addPlayer(QuePlayer.deQueue());
-	//T2.addPlayer(QuePlayer.deQueue());
-
-	//cout << T1.getTeamRating() << endl;
-	//cout << T2.getTeamRating() << endl;
-	
-
+	if (Teams->getQueueLength() == 1) { cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; }
 }
 

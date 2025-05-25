@@ -41,5 +41,11 @@
     <ClInclude Include="TeamRegister.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MatchDetails.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchDashboard.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
