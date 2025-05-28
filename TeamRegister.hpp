@@ -45,6 +45,7 @@ private:
 				Player* data = this->checkInQueue->peek();
 				cout << "Player Name: " << data->getPlayerName() << endl;
 				cout << "Player Rating: " << to_string(data->getPlayerRating()) << endl;
+				cout << "Player University: " << data->getPlayerUniversity() << endl;
 				cout << "1. Arrived" << endl;
 				cout << "2. Not Arrived" << endl;
 				cout << "-1. Return to Menu" << endl;
