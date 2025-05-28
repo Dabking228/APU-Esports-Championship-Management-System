@@ -103,7 +103,7 @@ public:
 
 	void getTolerance() {
 		cout << "Tolerance: " << TOLERANCE << endl;
-		cout << "Lowewr: " << LOWERBOUND << " | Higher: " << HIGHERBOUND << endl;
+		cout << "Lower: " << LOWERBOUND << " | Higher: " << HIGHERBOUND << endl;
 	}
 
 	void listAllPlayer(function<void (Player*)> func) {
@@ -136,13 +136,25 @@ public:
 
 };
 
-class Viewer {
+class Spectator {
 private:
-	string ViewerID;
-	string ViewerName;
-	int ViewerPriority;
+	string SpectatorID;
+	string SpectatorName;
+	string SpectatorType;
+	int SpectatorPriority;
 
 public:
+	Spectator(string SpectatorID, string SpectatorName, string SpectatorType, int SpectatorPriority) {
+		this->SpectatorID = SpectatorID;
+		this->SpectatorName = SpectatorName;
+		this->SpectatorType = SpectatorType;
+		this->SpectatorPriority = SpectatorPriority;
+	}
+
+	~Spectator() {
+
+	}
+
 };
 
 template <typename T> struct Node {

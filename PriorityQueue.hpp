@@ -30,7 +30,7 @@ public:
 		typename Queue<T>::QueueNode* node = this->createNewNode(type);
 
 		if (this->HEAD == nullptr) {
-			this->HEAD= this->TAIL = node;
+			this->HEAD = this->TAIL = node;
 		}
 		else {
 			if (this->HEAD->next == nullptr) {
@@ -76,7 +76,7 @@ public:
 	void enQueue(T* type, function<bool(T*, T*)> func, bool isUnique) {
 		if (isUnique == false) { this->enQueue(type, func);  }
 
-		if (checkUnique(type)) { cout << "couldnt add to queue" << endl; return; }
+		if (checkUnique(type)) { cout << "Couldn't add to queue" << endl; return; }
 
 		this->enQueue(type, func);
 	}
