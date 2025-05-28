@@ -89,7 +89,9 @@ int main() {
 		checkInPlayer->enQueue(registerPlayer->deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority();});
 	}
 
-	checkInPlayer->listQueue([](Player* p) { return p->getPlayerName() + " | " + to_string(p->getPlayerRating()) + " | " + to_string(p->getPlayerPriority()) ; });
+	checkInPlayer->listQueue([](Player* p) { 
+		cout << p->getPlayerName() << " | " << to_string(p->getPlayerRating()) << " | " << to_string(p->getPlayerPriority()) << endl;
+	});
 
 	TeamReg.openMenu();
 
