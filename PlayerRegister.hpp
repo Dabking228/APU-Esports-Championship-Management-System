@@ -9,6 +9,7 @@ class PlayerRegister{
 private:
 	string name;
 	int rating = -100;
+	string university;
 	int ID = 2000;
 
 	int input = -100;
@@ -29,10 +30,10 @@ private:
 			return;
 		}
 
-		cout << "ID\t|Name\t|Rating\t" << endl;
+		cout << "ID\t|Name\t|Rating\t|University" << endl;
 		registerQueue->listQueue(
 			[](Player* p) {
-				cout << to_string(p->getPlayerID()) + "\t|" + p->getPlayerName() + "\t|" + to_string(p->getPlayerRating()) << endl;
+				cout << to_string(p->getPlayerID()) + "\t|" + p->getPlayerName() + "\t|" + to_string(p->getPlayerRating()) + "\t|" + p->getPlayerUniversity() << endl;
 			}
 		);
 	}
@@ -47,13 +48,18 @@ private:
 			cin >> rating;
 			if (rating == -1) { break; }
 			if (rating < 1000 || rating > 16000) { cout << "Rating to high/low. Please Register Again" << endl; break; }
+			cout << "Player University: ";
+			cin >> university;
+			if (name == "-1") { break; }
+			
 			cout << "Registered" << endl;
 			ID++;
 			registerQueue->enQueue(new Player(
 				ID,
 				name,
 				rating,
-				1
+				1,
+				university
 			));
 		}
 	}

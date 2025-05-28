@@ -11,18 +11,20 @@ private:
 	string PlayerName;
 	int PlayerRating = 0;
 	int PlayerPriority = 0;
+	string PlayerUniversity;
 	bool isCheckedIn = false;
 
 
 public:
 	Player() { }
 
-	Player(int PlayerID, string PlayerName, int PlayerRating, int PlayerPriority) {
+	Player(int PlayerID, string PlayerName, int PlayerRating, int PlayerPriority, string PlayerUniversity) {
 		this->isCheckedIn = false;
 		this->PlayerID = PlayerID;
 		this->PlayerName = PlayerName;
 		this->PlayerRating = PlayerRating;
 		this->PlayerPriority = PlayerPriority;
+		this->PlayerUniversity = PlayerUniversity;
 	}
 
 	// Normal function goes above here
@@ -32,6 +34,8 @@ public:
 	string getPlayerName() { return this->PlayerName; }
 	int getPlayerRating() { return this->PlayerRating; }
 	int getPlayerPriority() { return this->PlayerPriority; }
+	string getPlayerUniversity() { return this->PlayerUniversity; }
+
 	bool getCheckedInStatus() {	return this->isCheckedIn; }
 	void toogleCheckIn() { this->isCheckedIn = !this->isCheckedIn; }
 };

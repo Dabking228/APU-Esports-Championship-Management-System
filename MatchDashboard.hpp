@@ -78,6 +78,7 @@ class MatchDashboard {
 	void assignMatch() {
 		if (numOfMatch != 0) { cout << "Match started" << endl; return; }
 		if (Teams->getQueueLength() == 1) { cout << "Match is either finish/ 1 team only" << endl; return; }
+		if (Teams->getQueueLength() < MAXTEAM) { cout << "Not enough Teams to start" << endl; return; }
 
 		while (!this->Teams->isEmpty()) {
 			Team* temp1 = this->Teams->deQueue();

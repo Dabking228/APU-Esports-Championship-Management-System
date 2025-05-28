@@ -12,7 +12,7 @@ using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
 const int MAXROWplayer = 100;
-const int MAXCOLplayer = 4;
+const int MAXCOLplayer = 5;
 string dummyPlayer[MAXROWplayer][MAXCOLplayer] = { {} };
 
 //Stacks, Queues, Priority Queues, and Circular Queues
@@ -29,9 +29,10 @@ void init() {
 		while (getline(ss, cell, ',') && col < MAXCOLplayer) {
 			dummyPlayer[row][col] = cell;
 			col++;
-			if (col == 3) {
+			// Debug Purpose: print the cell data
+			/*if (col == 5) {
 				cout << cell << endl;
-			}
+			}*/
 			
 		}
 
@@ -77,7 +78,7 @@ int main() {
 	
 	init();
 	for (int i = 0; i < (sizeof(dummyPlayer) / sizeof(dummyPlayer[0])); i++) {
-		dataPlayer[i] = new Player(stoi(dummyPlayer[i][0]),dummyPlayer[i][1],stoi(dummyPlayer[i][2]),stoi(dummyPlayer[i][3]));
+		dataPlayer[i] = new Player(stoi(dummyPlayer[i][0]),dummyPlayer[i][1],stoi(dummyPlayer[i][2]),stoi(dummyPlayer[i][3]), dummyPlayer[i][4]);
 		numPlayer++;
 	}
 
@@ -90,7 +91,7 @@ int main() {
 	}
 
 	checkInPlayer->listQueue([](Player* p) { 
-		cout << p->getPlayerName() << " | " << to_string(p->getPlayerRating()) << " | " << to_string(p->getPlayerPriority()) << endl;
+		cout << p->getPlayerName() << " | " << to_string(p->getPlayerRating()) << " | " << to_string(p->getPlayerPriority()) << " | " << p->getPlayerUniversity() << endl;
 	});
 
 	TeamReg.openMenu();
