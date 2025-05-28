@@ -32,7 +32,7 @@ private:
 		cout << "ID\t|Name\t|Rating\t" << endl;
 		registerQueue->listQueue(
 			[](Player* p) {
-				return to_string(p->getPlayerID()) + "\t|" + p->getPlayerName() + "\t|" + to_string(p->getPlayerRating());
+				cout << to_string(p->getPlayerID()) + "\t|" + p->getPlayerName() + "\t|" + to_string(p->getPlayerRating()) << endl;
 			}
 		);
 	}
