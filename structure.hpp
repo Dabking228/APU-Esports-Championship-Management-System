@@ -144,17 +144,30 @@ private:
 	int SpectatorPriority;
 
 public:
-	Spectator(string SpectatorID, string SpectatorName, string SpectatorType, int SpectatorPriority) {
+	Spectator() {
+		SpectatorID = "";
+		SpectatorName = "";
+		SpectatorType = "";
+		SpectatorPriority = 0;
+	}
+
+	Spectator(string SpectatorID, string SpectatorName, string SpectatorType, string SpectatorPriorityText) {
 		this->SpectatorID = SpectatorID;
 		this->SpectatorName = SpectatorName;
 		this->SpectatorType = SpectatorType;
+		try {
+			SpectatorPriority = stoi(SpectatorPriorityText);
+		}
+		catch (...) {
+			throw invalid_argument("Spectator Priority Error");
+		}
 		this->SpectatorPriority = SpectatorPriority;
 	}
 
-	~Spectator() {
-
-	}
-
+	string getSpectatorID() { return SpectatorID; }
+	string getSpectatorName() { return SpectatorName; }
+	string getSpectatorType() { return SpectatorType; }
+	int getSpectatorPriority() { return SpectatorPriority; }
 };
 
 template <typename T> struct Node {

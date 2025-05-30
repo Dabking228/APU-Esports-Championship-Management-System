@@ -83,7 +83,7 @@ public:
 
 	// deQueue a specific item, put it into param
 	T* deQueue(T* type) {
-		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return nullptr; }
+		if (HEAD == nullptr) { cout << "Nothing to remove!" << endl; return nullptr; }
 		if (type == nullptr) { cout << "Provided a nullptr! Will not proceed to deQueue" << endl; return nullptr; }
 
 		QueueNode* current, *currPrev, *currNext = nullptr;
@@ -99,7 +99,7 @@ public:
 		if (current->next == nullptr && current->prev == nullptr) {
 			HEAD = TAIL = nullptr;
 		}
-		// if the pass-in type is the for the last node
+		// if the pass-in type is for the last node
 		else if (current->next == nullptr) {
 			TAIL = current->prev;
 			TAIL->next = nullptr;
@@ -127,7 +127,7 @@ public:
 
 	// deQueue by index
 	T* deQueue(int index) {
-		if (HEAD == nullptr) { cout << "Noting to remove!" << endl; return nullptr; }
+		if (HEAD == nullptr) { cout << "Nothing to remove!" << endl; return nullptr; }
 		if (index < 0 || index > this->getQueueLength()) { return nullptr; }
 
 		QueueNode* current = nullptr;
@@ -212,8 +212,5 @@ public:
 		}
 	
 	}
-
-
-
 
 };
