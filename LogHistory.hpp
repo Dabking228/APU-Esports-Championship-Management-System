@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "Stack.hpp"
 #include "MatchDetails.hpp"
 #include "structure.hpp"
@@ -39,10 +40,11 @@ class LogHistory {
 		while (!playerQueue.isEmpty()) {
 			RankedPlayer rp = playerQueue.dequeue();
 
-			cout << rp.player->getPlayerName() << " | "
-				<< trim(rp.player->getPlayerUniversity()) << " | "
-				<< rp.player->getPlayerRating() << " ("
-				<< rp.result << ")" << endl;
+			cout << left
+				<< "| " << setw(10) << rp.player->getPlayerName()
+				<< "| " << setw(8) << trim(rp.player->getPlayerUniversity())
+				<< "| " << setw(10) << rp.player->getPlayerRating()
+				<< "( " << rp.result << " )" << endl;
 		}
 
 	}
