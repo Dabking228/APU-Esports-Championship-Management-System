@@ -54,7 +54,7 @@ class LogHistory {
 	}
 
 public:
-	LogHistory(Stack<Player>* AwaitingList, MatchDashboard& matchDash) : players(AwaitingList), matchDash(matchDash) {}
+	LogHistory(MatchDashboard& matchDash) : matchDash(matchDash) {}
 
 
 	void openMenu() {

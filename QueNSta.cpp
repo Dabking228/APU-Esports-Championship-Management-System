@@ -43,6 +43,24 @@ void init() {
 
 }
 
+void addTournamentDetails() {
+	string winner = Teams->peek()->getTeamName();
+	int rating = Teams->peek()->getTeamRating();
+	string player1 = Teams->peek()->getPlayer(1)->getPlayerName();
+	string uni1 = Teams->peek()->getPlayer(1)->getPlayerUniversity();
+	string player2 = Teams->peek()->getPlayer(2)->getPlayerName();
+	string uni2 = Teams->peek()->getPlayer(2)->getPlayerUniversity();
+	string player3 = Teams->peek()->getPlayer(3)->getPlayerName();
+	string uni3 = Teams->peek()->getPlayer(3)->getPlayerUniversity();
+	string player4 = Teams->peek()->getPlayer(4)->getPlayerName();
+	string uni4 = Teams->peek()->getPlayer(4)->getPlayerUniversity();
+	string player5 = Teams->peek()->getPlayer(5)->getPlayerName();
+	string uni5 = Teams->peek()->getPlayer(5)->getPlayerUniversity();
+
+	TournamentDetails td = TournamentDetails("14/06/2025", "Virtual", "APU All Stars Tournament", "0:40:54", winner, rating, player1, uni1, player2, uni2, player3, uni3, player4, uni4, player5, uni5);
+	//stack.push
+}
+
 
 Player** dataPlayer = new Player*[MAXROWplayer];
 int numPlayer = 0;
@@ -72,7 +90,7 @@ int main() {
 	PlayerRegister reg = PlayerRegister(registerPlayer);
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
 	MatchDashboard MatchDash = MatchDashboard(Teams);
-	LogHistory Logs = LogHistory(AwaitingList, MatchDash);
+	LogHistory Logs = LogHistory(MatchDash);
 	
 	bool isLoopMenu = true;
 	int input;
@@ -117,7 +135,10 @@ int main() {
 		case 2:
 			MatchDash.openMenu();
 
-			if (Teams->getQueueLength() == 1) { cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; }
+			if (Teams->getQueueLength() == 1) { 
+				cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; 
+				addTournamentDetails();
+			}
 			break;
 
 		case 3:
