@@ -8,6 +8,7 @@
 #include "TeamRegister.hpp"
 #include "PlayerRegister.hpp"
 #include "MatchDashboard.hpp"
+#include "LogHistory.hpp"
 using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
@@ -73,6 +74,7 @@ int main() {
 	PlayerRegister reg = PlayerRegister(registerPlayer);
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
 	MatchDashboard MatchDash = MatchDashboard(Teams);
+	LogHistory Logs = LogHistory(AwaitingList, MatchDash);
 	
 	reg.openMenu();
 	
@@ -101,5 +103,9 @@ int main() {
 	MatchDash.openMenu();
 
 	if (Teams->getQueueLength() == 1) { cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; }
+
+	Logs.openMenu();
 }
+
+
 

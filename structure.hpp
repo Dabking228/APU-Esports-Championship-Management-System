@@ -38,6 +38,8 @@ public:
 
 	bool getCheckedInStatus() {	return this->isCheckedIn; }
 	void toogleCheckIn() { this->isCheckedIn = !this->isCheckedIn; }
+
+	void setPlayerRating(int rating) { this->PlayerRating = rating; }
 };
 
 // Match will need a team, team need 5 player
@@ -153,4 +155,50 @@ template <typename T> struct Node {
 	Node* prev = nullptr;
 	T* type;
 	Node* next = nullptr;
+};
+
+class MatchResult {
+private:
+	string matchName;
+	string team1;
+	string team2;
+	int score1;
+	int score2;
+	string winner;
+	string playerList;
+	string highlight;
+
+public:
+	MatchResult() {
+
+	}
+
+	MatchResult(string matchName, string team1, int score1, string team2, int score2, string winner, string playerList, string highlight) {
+		this->matchName = matchName;
+		this->team1 = team1;
+		this->team2 = team2;
+		this->score1 = score1;
+		this->score2 = score2;
+		this->winner = winner;
+		this->playerList = playerList;
+		this->highlight = highlight;
+	}
+
+	string getMatchName() const { return matchName; }
+	string getTeam1() const { return team1; }
+	string getTeam2() const { return team2; }
+	int getScore1() const { return score1; }
+	int getScore2() const { return score2; }
+	string getWinner() const { return winner; }
+	string getPlayerList() const { return playerList; }
+	string getHighlight() const { return highlight; }
+
+	void setMatchName(string name) {
+		this->matchName = matchName;
+	}
+
+	struct RankedPlayer {
+		Player* player;
+		string result; 
+	};
 };
