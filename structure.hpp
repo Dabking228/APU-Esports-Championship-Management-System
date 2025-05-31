@@ -197,8 +197,9 @@ public:
 		this->matchName = matchName;
 	}
 
-	struct RankedPlayer {
-		Player* player;
-		string result; 
-	};
+};
+
+struct RankedPlayer {
+	Player* player;
+	string result;
 };

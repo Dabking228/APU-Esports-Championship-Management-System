@@ -18,7 +18,7 @@ class MatchDashboard {
 	Stack<Team>** VsStack;
 	MatchDetails** MatchDetail;
 	Stack<MatchResult>* resultStack = new Stack<MatchResult>();
-	CircularQueue<Player*> playerQueue;
+	CircularQueue<RankedPlayer> playerQueue;
 
 	void showMenu() {
 		cout << "--- Matchmaking Dashboard ---" << endl;
@@ -125,84 +125,12 @@ class MatchDashboard {
 		for (int i = 0; i < numOfMatch; i++) {
 
 			//requeue all winner
-			Team* loser = MatchDetail[i]->getLoser();
 			Team* winner = MatchDetail[i]->getWinner();
 			Teams->enQueue(winner, [](Team* t1, Team* t2) {return t1->getTeamRating() < t2->getTeamRating();});
 			
-			//add rating to winners, reduce rating to losers
-			for (int i = 1; i <= 5; ++i) {
+			changeRating(i);
 
-				//winner
-				Player* p = winner->getPlayer(i);
-				if (p == nullptr) continue;
-
-				int rating = p->getPlayerRating();
-				rating = rating + 100;
-				p->setPlayerRating(rating);
-
-				if (playerQueue.isFull()) {
-					playerQueue.dequeue();
-				}
-
-				playerQueue.enqueue(p);
-
-				//loser
-				Player* p2 = loser->getPlayer(i);
-				if (p2 == nullptr) continue;
-
-				rating = p->getPlayerRating();
-				rating = rating - 100;
-				p2->setPlayerRating(rating);
-
-				if (playerQueue.isFull()) {
-					playerQueue.dequeue();
-				}
-
-				playerQueue.enqueue(p);
-
-			}
-
-			//add match detail to stack
-			Team* t1 = MatchDetail[i]->getT1Data();
-			Team* t2 = MatchDetail[i]->getT2Data();
-			int score1 = MatchDetail[i]->getT1Score();
-			int score2 = MatchDetail[i]->getT2Score();
-
-			string team1 = t1->getTeamName();
-			string team2 = t2->getTeamName();
-			string matchName = MatchDetail[i]->getMatchName();
-			string winningTeam = winner->getTeamName();
-
-			string playersList;
-			int playerNum = 0;
-			string MVP;
-
-			//retrieve players for winning team
-			for (int i = 1; i <= 5; ++i) {
-				Player* p = winner->getPlayer(i);
-				if (p == nullptr) continue;
-
-				if (!playersList.empty()) {
-					playersList += ", ";  //add comma separator if not first player
-				}
-
-				playersList += p->getPlayerName();
-				playerNum++;
-			}
-
-			srand(static_cast<unsigned int>(time(nullptr)));
-
-			//randomly picks a player as MVP
-			if (playerNum == 0) {
-				MVP = "No MVP";
-			}
-			else {
-				int randomIndex = (rand() % playerNum) + 1;
-				MVP = t1->getPlayer(randomIndex)->getPlayerName() + " is MVP!";
-			}
-
-			MatchResult* result = new MatchResult(matchName, team1, score1, team2, score2, winningTeam, playersList, MVP);
-			resultStack->push(result);
+			addMatchDetails(i);
 			
 			delete MatchDetail[i];
 		}
@@ -212,6 +140,93 @@ class MatchDashboard {
 		numOfMatch = 0;
 
 		assignMatch();
+	}
+
+	void changeRating(int i) {
+
+		//add rating to winners, reduce rating to losers
+		Team* loser = MatchDetail[i]->getLoser();
+		Team* winner = MatchDetail[i]->getWinner();
+
+		for (int i = 1; i <= 5; ++i) {
+
+			//winner
+			Player* p = winner->getPlayer(i);
+			if (p == nullptr) continue;
+
+			int rating = p->getPlayerRating();
+			rating = rating + 100;
+			p->setPlayerRating(rating);
+
+			if (playerQueue.isFull()) {
+				playerQueue.dequeue();
+			}
+
+			playerQueue.enqueue({p, "+100" });
+
+			//loser
+			Player* p2 = loser->getPlayer(i);
+			if (p2 == nullptr) continue;
+
+			rating = p2->getPlayerRating();
+			rating = rating - 100;
+			p2->setPlayerRating(rating);
+
+			if (playerQueue.isFull()) {
+				playerQueue.dequeue();
+			}
+
+			playerQueue.enqueue({p2, "-100" });
+
+		}
+	}
+
+	void addMatchDetails(int i) {
+		//add match detail to stack
+
+		Team* loser = MatchDetail[i]->getLoser();
+		Team* winner = MatchDetail[i]->getWinner();
+
+		Team* t1 = MatchDetail[i]->getT1Data();
+		Team* t2 = MatchDetail[i]->getT2Data();
+		int score1 = MatchDetail[i]->getT1Score();
+		int score2 = MatchDetail[i]->getT2Score();
+
+		string team1 = t1->getTeamName();
+		string team2 = t2->getTeamName();
+		string matchName = MatchDetail[i]->getMatchName();
+		string winningTeam = winner->getTeamName();
+
+		string playersList;
+		int playerNum = 0;
+		string MVP;
+
+		//retrieve players for winning team
+		for (int i = 1; i <= 5; ++i) {
+			Player* p = winner->getPlayer(i);
+			if (p == nullptr) continue;
+
+			if (!playersList.empty()) {
+				playersList += ", ";  //add comma separator if not first player
+			}
+
+			playersList += p->getPlayerName();
+			playerNum++;
+		}
+
+		srand(static_cast<unsigned int>(time(nullptr)));
+
+		//randomly picks a player as MVP
+		if (playerNum == 0) {
+			MVP = "No MVP";
+		}
+		else {
+			int randomIndex = (rand() % playerNum) + 1;
+			MVP = t1->getPlayer(randomIndex)->getPlayerName() + " is MVP!";
+		}
+
+		MatchResult* result = new MatchResult(matchName, team1, score1, team2, score2, winningTeam, playersList, MVP);
+		resultStack->push(result);
 	}
 
 public:
@@ -263,7 +278,7 @@ public:
 		return resultStack;
 	}
 
-	CircularQueue<Player*>& getPlayerQueue() {
+	CircularQueue<RankedPlayer>& getPlayerQueue() {
 		return playerQueue;
 	}
 };

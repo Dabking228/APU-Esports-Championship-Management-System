@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Stack.hpp"
 #include "MatchDetails.hpp"
-#include "PriorityQueue.hpp"
 #include "structure.hpp"
+#include "Utils.hpp"
 using namespace std;
 
 class LogHistory {
@@ -33,17 +33,16 @@ class LogHistory {
 	}
 
 	void playerPerformance() {
-		CircularQueue<Player*>& playerQueue = matchDash.getPlayerQueue();
-		CircularQueue<Player*> clonedQueue = playerQueue.clone();
+		CircularQueue<RankedPlayer>& playerQueue = matchDash.getPlayerQueue();
+		CircularQueue<RankedPlayer> clonedQueue = playerQueue.clone();
 
-		while (!clonedQueue.isEmpty()) {
-			Player* p = clonedQueue.dequeue();
+		while (!playerQueue.isEmpty()) {
+			RankedPlayer rp = playerQueue.dequeue();
 
-			if (p != nullptr) {
-				cout << p->getPlayerName() << " | "
-					<< p->getPlayerUniversity() << "| "
-					<< p->getPlayerRating() << " (+100 rating)" << endl;
-			}
+			cout << rp.player->getPlayerName() << " | "
+				<< trim(rp.player->getPlayerUniversity()) << " | "
+				<< rp.player->getPlayerRating() << " ("
+				<< rp.result << ")" << endl;
 		}
 
 	}

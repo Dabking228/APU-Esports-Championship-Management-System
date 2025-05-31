@@ -22,7 +22,7 @@ public:
         delete[] arr;
     }
 
-    bool isFull() { 
+    bool isFull() const {
         return size == capacity;
     }
 
@@ -30,7 +30,7 @@ public:
         return size == 0;
     }
 
-    void enqueue(T item) {
+    void enqueue(const T& item) {
         if (isFull()) {
             cout << "Queue is full. Cannot enqueue.\n";
             return;
@@ -45,8 +45,7 @@ public:
 
     T dequeue() {
         if (isEmpty()) {
-            cout << "Queue is empty. Cannot dequeue.\n";
-            return nullptr;
+            throw std::out_of_range("Queue is empty. Cannot dequeue.");
         }
 
         T item = arr[front];
@@ -61,28 +60,12 @@ public:
         return item;
     }
 
-    void printQueue() {
-        if (isEmpty()) {
-            cout << "Queue is empty.\n";
-            return;
-        }
-
-        cout << "Circular Queue: ";
-        for (int i = 0; i < size; i++) {
-            int index = (front + i) % capacity;
-            cout << arr[index]->getPlayerName() << " ";
-        }
-        cout << endl;
-    }
-
-    int getSize() {
+    int getSize() const {
         return size;
     }
 
     CircularQueue<T> clone() const {
         CircularQueue<T> newQueue(capacity);
-
-        if (isEmpty()) return newQueue;
 
         for (int i = 0; i < size; ++i) {
             int index = (front + i) % capacity;
