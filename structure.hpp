@@ -38,6 +38,8 @@ public:
 
 	bool getCheckedInStatus() {	return this->isCheckedIn; }
 	void toogleCheckIn() { this->isCheckedIn = !this->isCheckedIn; }
+
+	void setPlayerRating(int rating) { this->PlayerRating = rating; }
 };
 
 // Match will need a team, team need 5 player
@@ -153,4 +155,114 @@ template <typename T> struct Node {
 	Node* prev = nullptr;
 	T* type;
 	Node* next = nullptr;
+};
+
+class MatchResult {
+private:
+	string matchName;
+	string team1;
+	string team2;
+	int score1;
+	int score2;
+	string winner;
+	string playerList;
+	string highlight;
+
+public:
+	MatchResult() {
+
+	}
+
+	MatchResult(string matchName, string team1, int score1, string team2, int score2, string winner, string playerList, string highlight) {
+		this->matchName = matchName;
+		this->team1 = team1;
+		this->team2 = team2;
+		this->score1 = score1;
+		this->score2 = score2;
+		this->winner = winner;
+		this->playerList = playerList;
+		this->highlight = highlight;
+	}
+
+	string getMatchName() const { return matchName; }
+	string getTeam1() const { return team1; }
+	string getTeam2() const { return team2; }
+	int getScore1() const { return score1; }
+	int getScore2() const { return score2; }
+	string getWinner() const { return winner; }
+	string getPlayerList() const { return playerList; }
+	string getHighlight() const { return highlight; }
+
+	void setMatchName(string name) {
+		this->matchName = matchName;
+	}
+
+};
+
+struct RankedPlayer {
+	Player* player;
+	string result;
+};
+
+class TournamentDetails {
+private:
+	string date;
+	string venue;
+	string name;
+	string avgDuration;
+	string winner;
+	int teamRating;
+	string player1;
+	string uni1;
+	string player2;
+	string uni2;
+	string player3;
+	string uni3;
+	string player4;
+	string uni4;
+	string player5;
+	string uni5;
+
+public:
+	TournamentDetails(string date, string venue, string name, string avgDuration,
+		string winner, int teamRating,
+		string player1, string uni1,
+		string player2, string uni2,
+		string player3, string uni3,
+		string player4, string uni4,
+		string player5, string uni5) {
+		this->date = date;
+		this->venue = venue;
+		this->name = name;
+		this->avgDuration = avgDuration;
+		this->winner = winner;
+		this->teamRating = teamRating;
+		this->player1 = player1;
+		this->uni1 = uni1;
+		this->player2 = player2;
+		this->uni2 = uni2;
+		this->player3 = player3;
+		this->uni3 = uni3;
+		this->player4 = player4;
+		this->uni4 = uni4;
+		this->player5 = player5;
+		this->uni5 = uni5;
+	}
+
+	string getDate() { return date; }
+	string getVenue() { return venue; }
+	string getName() { return name; }
+	string getAvgDuration() { return avgDuration; }
+	string getWinner() { return winner; }
+	int getTeamRating() { return teamRating; }
+	string getPlayer1() { return player1; }
+	string getUni1() { return uni1; }
+	string getPlayer2() { return player2; }
+	string getUni2() { return uni2; }
+	string getPlayer3() { return player3; }
+	string getUni3() { return uni3; }
+	string getPlayer4() { return player4; }
+	string getUni4() { return uni4; }
+	string getPlayer5() { return player5; }
+	string getUni5() { return uni5; }
 };

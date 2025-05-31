@@ -8,6 +8,7 @@
 #include "TeamRegister.hpp"
 #include "PlayerRegister.hpp"
 #include "MatchDashboard.hpp"
+#include "LogHistory.hpp"
 using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
@@ -65,41 +66,82 @@ Stack<Player>* WaitingList = new Stack<Player>("Waiting List");
 Stack<Player>* AwaitingList = new Stack<Player>("Awaiting List");
 PriorityQueue<Team>* Teams = new PriorityQueue<Team>("Team Registed", MAXTEAM);
 
-
-
 int main() {
 	if (!isPowerOfTwo(MAXTEAM)) { cout << "Team size must be pwr of 2" << endl; return 0; }
 
 	PlayerRegister reg = PlayerRegister(registerPlayer);
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
 	MatchDashboard MatchDash = MatchDashboard(Teams);
+	LogHistory Logs = LogHistory(AwaitingList, MatchDash);
 	
-	reg.openMenu();
-	
-	init();
-	for (int i = 0; i < (sizeof(dummyPlayer) / sizeof(dummyPlayer[0])); i++) {
-		dataPlayer[i] = new Player(stoi(dummyPlayer[i][0]),dummyPlayer[i][1],stoi(dummyPlayer[i][2]),stoi(dummyPlayer[i][3]), dummyPlayer[i][4]);
-		numPlayer++;
+	bool isLoopMenu = true;
+	int input;
+
+	while (isLoopMenu) {
+		cout << endl;
+		cout << "--------------------- Main Menu ---------------------" << endl;
+		cout << "1. Tournament Registration & Player Queuing" << endl;
+		cout << "2. Match Scheduling & Player Progression" << endl;
+		cout << "3. Live Stream & Spectator Queue Management" << endl;
+		cout << "4. Game Result Logging & Performance History" << endl;
+		cout << "-1. Exit System" << endl;
+		cin >> input;
+		
+		switch (input) {
+		case 1:
+			reg.openMenu();
+
+			init();
+			for (int i = 0; i < (sizeof(dummyPlayer) / sizeof(dummyPlayer[0])); i++) {
+				dataPlayer[i] = new Player(stoi(dummyPlayer[i][0]), dummyPlayer[i][1], stoi(dummyPlayer[i][2]), stoi(dummyPlayer[i][3]), dummyPlayer[i][4]);
+				numPlayer++;
+			}
+
+			for (int i = 0; i < numPlayer; i++) {
+				registerPlayer->enQueue(dataPlayer[i]);
+			}
+
+			while (!registerPlayer->isEmpty()) {
+				checkInPlayer->enQueue(registerPlayer->deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority(); });
+			}
+
+			checkInPlayer->listQueue([](Player* p) {
+				cout << p->getPlayerName() << " | " << to_string(p->getPlayerRating()) << " | " << to_string(p->getPlayerPriority()) << " | " << p->getPlayerUniversity() << endl;
+				});
+
+			TeamReg.openMenu();
+
+			Teams->listQueue([](Team* t) { cout << t->getTeamName() << " | " << t->getTeamRating() << endl; });
+			break;
+
+		case 2:
+			MatchDash.openMenu();
+
+			if (Teams->getQueueLength() == 1) { cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; }
+			break;
+
+		case 3:
+			// live stream code
+			break;
+
+		case 4:
+			Logs.openMenu();
+			break;
+
+		case -1:
+			isLoopMenu = false;
+			cout << "Exiting System..." << endl;
+			break;
+
+		default:
+			cout << "Please Select a correct input" << endl;
+			cin.clear();
+			cin.ignore(100, '\n');
+			break;
+		}
 	}
 
-	for (int i = 0; i < numPlayer; i++) {
-		registerPlayer->enQueue(dataPlayer[i]);
-	}
-	
-	while (!registerPlayer->isEmpty()) {
-		checkInPlayer->enQueue(registerPlayer->deQueue(), [](Player* p1, Player* p2) {return p1->getPlayerPriority() < p2->getPlayerPriority();});
-	}
-
-	checkInPlayer->listQueue([](Player* p) { 
-		cout << p->getPlayerName() << " | " << to_string(p->getPlayerRating()) << " | " << to_string(p->getPlayerPriority()) << " | " << p->getPlayerUniversity() << endl;
-	});
-
-	TeamReg.openMenu();
-
-	Teams->listQueue([](Team* t) { cout << t->getTeamName() << " | " << t->getTeamRating() << endl;});
-
-	MatchDash.openMenu();
-
-	if (Teams->getQueueLength() == 1) { cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; }
 }
+
+
 

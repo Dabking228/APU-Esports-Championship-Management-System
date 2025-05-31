@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#pragma once
 using namespace std;
 
 class MatchDetails {
@@ -12,6 +13,7 @@ class MatchDetails {
 	string MatchName;
 	Stack<Team>* VS;
 	Team* Winner;
+	Team* Loser;
 	bool matchFinish = false;
 
 	void showMenu() {
@@ -66,8 +68,12 @@ class MatchDetails {
 		if (!matchFinish) { return; }
 		if (T1P > T2P) {
 			Winner = VS->peek();
+			Team* t1 = VS->pop();
+			Loser = VS->peek();
+			VS->push(t1);
 		}
 		else {
+			Loser = VS->peek();
 			Team* t1 = VS->pop();
 			Winner = VS->peek();
 			VS->push(t1);
@@ -142,6 +148,22 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	Team* getLoser() {
+		if (matchFinish) {
+			return Loser;
+		}
+
+		return nullptr;
+	}
+
+	int getT1Score() {
+		return T1P;
+	}
+
+	int getT2Score() {
+		return T2P;
 	}
 
 	bool isMatchFinish() { return this->matchFinish; }
