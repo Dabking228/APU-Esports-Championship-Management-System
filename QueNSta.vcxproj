@@ -130,11 +130,13 @@
     <ClCompile Include="QueNSta.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircularQueueTask3.hpp" />
     <ClInclude Include="MatchDetails.hpp" />
     <ClInclude Include="MatchDashboard.hpp" />
     <ClInclude Include="PlayerRegister.hpp" />
     <ClInclude Include="PriorityQueue.hpp" />
     <ClInclude Include="Queue.hpp" />
+    <ClInclude Include="SeatManagement.hpp" />
     <ClInclude Include="Stack.hpp" />
     <ClInclude Include="structure.hpp" />
     <ClInclude Include="TeamRegister.hpp" />

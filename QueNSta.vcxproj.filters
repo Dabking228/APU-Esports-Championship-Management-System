@@ -47,5 +47,11 @@
     <ClInclude Include="MatchDashboard.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SeatManagement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueueTask3.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
