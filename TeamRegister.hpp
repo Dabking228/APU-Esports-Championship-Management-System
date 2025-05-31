@@ -269,7 +269,7 @@ private:
 
 		// show all player from teams
 		cout << "--- Player in teams ---" << endl;
-		for (int i = 0; i < numOfTeam - 1; i++) {
+		for (int i = 0; i < numOfTeam; i++) {
 			Team* team = TeamsRegistered[i];
 			cout << "--- " << team->getTeamName() << " ---" << endl;
 			team->listAllPlayer(
