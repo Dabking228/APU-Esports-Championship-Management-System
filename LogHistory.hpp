@@ -16,6 +16,11 @@ class LogHistory {
 		Stack<MatchResult>* globalStack = matchDash.getResultStack();
 		Stack<MatchResult>* clonedStack = globalStack;
 
+		if (globalStack->isEmpty()) {
+			cout << "No matches ended yet!" << endl;
+			return;
+		}
+
 		while (!clonedStack->isEmpty()) {
 			MatchResult* result = clonedStack->pop();
 
@@ -37,6 +42,11 @@ class LogHistory {
 	void playerPerformance() {
 		CircularQueue<RankedPlayer>& playerQueue = matchDash.getPlayerQueue();
 		CircularQueue<RankedPlayer> clonedQueue = playerQueue.clone();
+
+		if (playerQueue.isEmpty()) {
+			cout << "No players won or lost yet!" << endl;
+			return;
+		}
 
 		while (!clonedQueue.isEmpty()) {
 			RankedPlayer rp = clonedQueue.dequeue();
@@ -75,7 +85,7 @@ class LogHistory {
 
 		}
 
-		cout << "----------------------------------------" << endl;
+		cout << "----------------------------------------" << endl << endl;
 	}
 
 public:
