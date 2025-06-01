@@ -36,7 +36,6 @@ class LogHistory {
 			delete result;
 		}
 
-		delete clonedStack;
 	}
 
 	void playerPerformance() {
@@ -61,8 +60,6 @@ class LogHistory {
 	}
 
 	void pastTournamentResults() {
-
-		auto* curr = PastTournaments.getHead();
 
 		while (!PastTournaments.isEmpty()) {
 			TournamentDetails* t = PastTournaments.deQueue();
