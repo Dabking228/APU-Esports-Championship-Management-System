@@ -18,6 +18,9 @@
     <ClCompile Include="QueNSta.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PriorityQueueSpectator.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="structure.hpp">

@@ -42,7 +42,7 @@ public:
 		// Circular queue is empty
 		if (isEmpty()) {
 			cout << "The circular queue is empty! No value retrieved!" << endl;
-			return;
+			return Spectator();
 		}
 		return arr[front];
 	}
@@ -52,7 +52,7 @@ public:
 		// Circular queue is empty
 		if (isEmpty()) {
 			cout << "The circular queue is empty! No value retrieved!" << endl;
-			return;
+			return Spectator();
 		}
 		// int rear = (front + count - 1) % maxSize;
 		return arr[rear];
@@ -76,11 +76,21 @@ public:
 		// Circular queue is empty
 		if (isEmpty()) {
 			cout << "The circular queue is empty! Cannot dequeue!" << endl;
-			return;
+			return Spectator();
 		}
 		Spectator removing = arr[front];
 		front = (front + 1) % maxSize;
 		count--;
 		return removing;
 	}
+
+	// Display all elements in the circular queue
+	void displayCircularQueue() {
+		cout << "Overflow Circular Queue: " << endl;
+		for (int i = 0; i < count; i++) {
+			int index = (front + i) % maxSize;
+			cout << (i + 1) + "." << arr[index].getSpectatorID() << " " << arr[index].getSpectatorName() << endl;
+		}
+	}
+
 };

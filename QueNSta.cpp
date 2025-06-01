@@ -11,6 +11,7 @@
 #include "TeamRegister.hpp"
 #include "PlayerRegister.hpp"
 #include "MatchDashboard.hpp"
+#include "SeatManagement.hpp"
 using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
@@ -145,6 +146,10 @@ int main() {
 	cout << "\nTime taken: " << taken.count() << " seconds" << endl;
 	SIZE_T spectatorMemoryAfter = getCurrentMemoryUsage();
 	cout << "Memory used: " << (spectatorMemoryAfter - spectatorMemoryBefore) / 1024 << " KB" << endl;
+	
+	Seat seatmanage;
+	seatmanage.displayAllSeats();
+
 	return 0;
 
 }
