@@ -2,7 +2,7 @@
 #include "Stack.hpp"
 #include "MatchDetails.hpp"
 #include "PriorityQueue.hpp"
-#include "CircularQueue(Q3).hpp"
+#include "CircularQueue(Q4).hpp"
 #include "structure.hpp"
 using namespace std;
 
@@ -18,7 +18,7 @@ class MatchDashboard {
 	Stack<Team>** VsStack;
 	MatchDetails** MatchDetail;
 	Stack<MatchResult>* resultStack = new Stack<MatchResult>();
-	CircularQueue<RankedPlayer> playerQueue;
+	CircularQueue1<RankedPlayer> playerQueue;
 
 	void showMenu() {
 		cout << "--- Matchmaking Dashboard ---" << endl;
@@ -278,7 +278,7 @@ public:
 		return resultStack;
 	}
 
-	CircularQueue<RankedPlayer>& getPlayerQueue() {
+	CircularQueue1<RankedPlayer>& getPlayerQueue() {
 		return playerQueue;
 	}
 };

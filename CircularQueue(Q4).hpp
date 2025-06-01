@@ -3,14 +3,14 @@
 using namespace std;
 
 template <typename T>
-class CircularQueue {
+class CircularQueue1 {
 private:
     int front, rear, size;
     int capacity;
     T* arr;
 
 public:
-    CircularQueue(int maxSize = 30) {
+    CircularQueue1(int maxSize = 30) {
         capacity = maxSize;
         arr = new T[capacity];
         front = -1;
@@ -18,7 +18,7 @@ public:
         size = 0;
     }
 
-    ~CircularQueue() {
+    ~CircularQueue1() {
         delete[] arr;
     }
 
@@ -64,8 +64,8 @@ public:
         return size;
     }
 
-    CircularQueue<T> clone() const {
-        CircularQueue<T> newQueue(capacity);
+    CircularQueue1<T> clone() const {
+        CircularQueue1<T> newQueue(capacity);
 
         for (int i = 0; i < size; ++i) {
             int index = (front + i) % capacity;

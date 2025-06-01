@@ -50,7 +50,7 @@
     <ClInclude Include="LogHistory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircularQueue(Q3).hpp">
+    <ClInclude Include="CircularQueue%28Q4%29.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

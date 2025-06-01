@@ -39,8 +39,8 @@ class LogHistory {
 	}
 
 	void playerPerformance() {
-		CircularQueue<RankedPlayer>& playerQueue = matchDash.getPlayerQueue();
-		CircularQueue<RankedPlayer> clonedQueue = playerQueue.clone();
+		CircularQueue1<RankedPlayer>& playerQueue = matchDash.getPlayerQueue();
+		CircularQueue1<RankedPlayer> clonedQueue = playerQueue.clone();
 
 		if (playerQueue.isEmpty()) {
 			cout << "No players won or lost yet!" << endl;
