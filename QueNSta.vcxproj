@@ -130,7 +130,7 @@
     <ClCompile Include="QueNSta.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircularQueueTask3.hpp" />
+    <ClInclude Include="CircularQueueSpectatorOverflow.hpp" />
     <ClInclude Include="MatchDetails.hpp" />
     <ClInclude Include="MatchDashboard.hpp" />
     <ClInclude Include="PlayerRegister.hpp" />

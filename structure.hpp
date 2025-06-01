@@ -161,7 +161,6 @@ public:
 		catch (...) {
 			throw invalid_argument("Spectator Priority Error");
 		}
-		this->SpectatorPriority = SpectatorPriority;
 	}
 
 	string getSpectatorID() { return SpectatorID; }
