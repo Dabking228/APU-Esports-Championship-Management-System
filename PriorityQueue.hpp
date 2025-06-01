@@ -80,4 +80,6 @@ public:
 
 		this->enQueue(type, func);
 	}
+
+	typename PriorityQueue<T>::QueueNode* getHead() const { return this->HEAD; }
 };

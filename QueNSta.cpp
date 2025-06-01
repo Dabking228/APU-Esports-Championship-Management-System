@@ -43,7 +43,48 @@ void init() {
 
 }
 
-void addTournamentDetails() {
+PriorityQueue<TournamentDetails> loadTournamentsToQueue(const string& filename) {
+	PriorityQueue<TournamentDetails> tournamentQueue;
+	ifstream file(filename);
+	string line;
+
+	//higher viewcount = higher priority
+	auto comparator = [](TournamentDetails* a, TournamentDetails* b) {
+		return a->getTotalViewers() > b->getTotalViewers();
+	};
+
+	while (getline(file, line)) {
+		stringstream ss(line);
+		string date, venue, name, avgDuration, winner, teamRatingStr, totalViewersStr;
+		string p1, u1, p2, u2, p3, u3, p4, u4, p5, u5;
+
+		getline(ss, date, ',');
+		getline(ss, venue, ',');
+		getline(ss, name, ',');
+		getline(ss, avgDuration, ',');
+		getline(ss, winner, ',');
+		getline(ss, teamRatingStr, ',');
+		getline(ss, totalViewersStr, ',');
+		getline(ss, p1, ','); getline(ss, u1, ',');
+		getline(ss, p2, ','); getline(ss, u2, ',');
+		getline(ss, p3, ','); getline(ss, u3, ',');
+		getline(ss, p4, ','); getline(ss, u4, ',');
+		getline(ss, p5, ','); getline(ss, u5);
+
+		int teamRating = stoi(teamRatingStr);
+		int totalViewers = stoi(totalViewersStr);
+
+		TournamentDetails* t = new TournamentDetails(date, venue, name, avgDuration, winner, teamRating, totalViewers,
+			p1, u1, p2, u2, p3, u3, p4, u4, p5, u5);
+
+		tournamentQueue.enQueue(t, comparator);
+	}
+
+	return tournamentQueue;
+}
+
+
+void addTournamentDetails(PriorityQueue<Team>* Teams, PriorityQueue<TournamentDetails> PastTournaments) {
 	string winner = Teams->peek()->getTeamName();
 	int rating = Teams->peek()->getTeamRating();
 	string player1 = Teams->peek()->getPlayer(1)->getPlayerName();
@@ -57,8 +98,14 @@ void addTournamentDetails() {
 	string player5 = Teams->peek()->getPlayer(5)->getPlayerName();
 	string uni5 = Teams->peek()->getPlayer(5)->getPlayerUniversity();
 
-	TournamentDetails td = TournamentDetails("14/06/2025", "Virtual", "APU All Stars Tournament", "0:40:54", winner, rating, player1, uni1, player2, uni2, player3, uni3, player4, uni4, player5, uni5);
-	//stack.push
+	TournamentDetails* td = new TournamentDetails("14/06/2025", "Virtual", "APU All Stars Tournament", "0:40:54", winner, rating, 450, player1, uni1, player2, uni2, player3, uni3, player4, uni4, player5, uni5);
+	
+	//higher viewcount = higher priority
+	auto comparator = [](TournamentDetails* a, TournamentDetails* b) {
+		return a->getTotalViewers() > b->getTotalViewers();
+	};
+
+	PastTournaments.enQueue(td, comparator);
 }
 
 
@@ -83,6 +130,7 @@ PriorityQueue<Player>* checkInPlayer = new PriorityQueue<Player>("Check In");
 Stack<Player>* WaitingList = new Stack<Player>("Waiting List");
 Stack<Player>* AwaitingList = new Stack<Player>("Awaiting List");
 PriorityQueue<Team>* Teams = new PriorityQueue<Team>("Team Registed", MAXTEAM);
+PriorityQueue<TournamentDetails> PastTournaments = loadTournamentsToQueue("./data/PastTournament.csv");
 
 int main() {
 	if (!isPowerOfTwo(MAXTEAM)) { cout << "Team size must be pwr of 2" << endl; return 0; }
@@ -90,7 +138,7 @@ int main() {
 	PlayerRegister reg = PlayerRegister(registerPlayer);
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
 	MatchDashboard MatchDash = MatchDashboard(Teams);
-	LogHistory Logs = LogHistory(MatchDash);
+	LogHistory Logs = LogHistory(MatchDash, PastTournaments);
 	
 	bool isLoopMenu = true;
 	int input;
@@ -137,7 +185,7 @@ int main() {
 
 			if (Teams->getQueueLength() == 1) { 
 				cout << "Game Finish Winner: " << Teams->peek()->getTeamName() << endl; 
-				addTournamentDetails();
+				addTournamentDetails(Teams, PastTournaments);
 			}
 			break;
 
