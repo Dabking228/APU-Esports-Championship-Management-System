@@ -212,6 +212,7 @@ private:
 	string avgDuration;
 	string winner;
 	int teamRating;
+	int totalViewers;
 	string player1;
 	string uni1;
 	string player2;
@@ -225,7 +226,7 @@ private:
 
 public:
 	TournamentDetails(string date, string venue, string name, string avgDuration,
-		string winner, int teamRating,
+		string winner, int teamRating, int totalViewers,
 		string player1, string uni1,
 		string player2, string uni2,
 		string player3, string uni3,
@@ -237,6 +238,7 @@ public:
 		this->avgDuration = avgDuration;
 		this->winner = winner;
 		this->teamRating = teamRating;
+		this->totalViewers = totalViewers;
 		this->player1 = player1;
 		this->uni1 = uni1;
 		this->player2 = player2;
@@ -255,6 +257,7 @@ public:
 	string getAvgDuration() { return avgDuration; }
 	string getWinner() { return winner; }
 	int getTeamRating() { return teamRating; }
+	int getTotalViewers() { return totalViewers; }
 	string getPlayer1() { return player1; }
 	string getUni1() { return uni1; }
 	string getPlayer2() { return player2; }

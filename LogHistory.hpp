@@ -10,10 +10,16 @@ class LogHistory {
 
 	Stack<Player>* players;
 	MatchDashboard& matchDash;
+	PriorityQueue<TournamentDetails> PastTournaments;
 
 	void recentMatchResults() {
 		Stack<MatchResult>* globalStack = matchDash.getResultStack();
 		Stack<MatchResult>* clonedStack = globalStack;
+
+		if (globalStack->isEmpty()) {
+			cout << "No matches ended yet!" << endl;
+			return;
+		}
 
 		while (!clonedStack->isEmpty()) {
 			MatchResult* result = clonedStack->pop();
@@ -37,8 +43,13 @@ class LogHistory {
 		CircularQueue<RankedPlayer>& playerQueue = matchDash.getPlayerQueue();
 		CircularQueue<RankedPlayer> clonedQueue = playerQueue.clone();
 
-		while (!playerQueue.isEmpty()) {
-			RankedPlayer rp = playerQueue.dequeue();
+		if (playerQueue.isEmpty()) {
+			cout << "No players won or lost yet!" << endl;
+			return;
+		}
+
+		while (!clonedQueue.isEmpty()) {
+			RankedPlayer rp = clonedQueue.dequeue();
 
 			cout << left
 				<< "| " << setw(10) << rp.player->getPlayerName()
@@ -51,10 +62,34 @@ class LogHistory {
 
 	void pastTournamentResults() {
 
+		auto* curr = PastTournaments.getHead();
+
+		while (!PastTournaments.isEmpty()) {
+			TournamentDetails* t = PastTournaments.deQueue();
+
+			cout << "----------------------------------------" << endl;
+
+			cout << "Date: " << t->getDate() << endl;
+			cout << "Venue: " << t->getVenue() << endl;
+			cout << "Name: " << t->getName() << endl;
+			cout << "Duration: " << t->getAvgDuration() << endl;
+			cout << "Winner: " << t->getWinner() << endl;
+			cout << "Team Rating: " << t->getTeamRating() << endl;
+			cout << "Total Viewers: " << t->getTotalViewers() << endl;
+			cout << "Players: " << endl;
+			cout << "  " << t->getPlayer1() << " - " << t->getUni1() << endl;
+			cout << "  " << t->getPlayer2() << " - " << t->getUni2() << endl;
+			cout << "  " << t->getPlayer3() << " - " << t->getUni3() << endl;
+			cout << "  " << t->getPlayer4() << " - " << t->getUni4() << endl;
+			cout << "  " << t->getPlayer5() << " - " << t->getUni5() << endl;
+
+		}
+
+		cout << "----------------------------------------" << endl << endl;
 	}
 
 public:
-	LogHistory(Stack<Player>* AwaitingList, MatchDashboard& matchDash) : players(AwaitingList), matchDash(matchDash) {}
+	LogHistory(MatchDashboard& matchDash, PriorityQueue<TournamentDetails> PastTournaments) : matchDash(matchDash), PastTournaments(PastTournaments){}
 
 
 	void openMenu() {
