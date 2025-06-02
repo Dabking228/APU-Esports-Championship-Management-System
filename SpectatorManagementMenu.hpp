@@ -16,7 +16,7 @@ class SpectatorMenu {
 	Spectator* SpectatorArray;
 	Seat seat;
 	PriorityQueueSpectator priorityQueueSpectator;
-	CircularQueueSpectatorOverflow circularQueueSpectatorOverflow(20);
+	CircularQueueSpectatorOverflow* overflow;
 
 	string SpectatorDataset = "./data/Spectators.csv";
 public:
@@ -25,7 +25,7 @@ public:
 		Spectator* SpectatorArray;
 		Seat seat;
 		PriorityQueueSpectator priorityQueueSpectator;
-		CircularQueueSpectatorOverflow circularQueueSpectatorOverflow(20);
+		overflow = new CircularQueueSpectatorOverflow(20);
 	}
 
 	int getNumberOfSpectators(string filename) {
@@ -98,7 +98,7 @@ public:
 
 	void loadPriorityQueue() {
 		for (int i = 0; i < numberOfSpectators; i++) {
-			priorityQueueSpectator.insertByPriority(SpectatorArray[i], circularQueueSpectatorOverflow);
+			priorityQueueSpectator.insertByPriority(SpectatorArray[i], *overflow);
 		}
 		return;
 	}
@@ -131,7 +131,7 @@ public:
 
 			case 2: priorityQueueSpectator.displaySpectatorPriorityQueue(); break;
 
-			case 3: circularQueueSpectatorOverflow.displayCircularQueue(); break;
+			case 3: overflow->displayCircularQueue(); break;
 
 			case 4: seat.displayAllSeats(); break;
 
@@ -140,7 +140,7 @@ public:
 					Spectator s = priorityQueueSpectator.deQueue();
 					if (!seat.assignSeatAutomatically(s)) {
 						// Move to overflow if priority queue is full
-						circularQueueSpectatorOverflow.enqueue(s);
+						overflow->enqueue(s);
 					}
 				}
 				break;
