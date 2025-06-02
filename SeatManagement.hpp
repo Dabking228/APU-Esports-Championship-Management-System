@@ -148,9 +148,10 @@ public:
 			normalSeats[2][i] = EMPTY_SEAT;
 			normalSeats[3][i] = EMPTY_SEAT;
 		}
-		streamerCount = 0;
-		vipCount = 0;
-		normalCount = 0;
+		streamerCount = vipCount = normalCount = 0;
+		streamerNextCol = 0;
+		vipNextRow = vipNextCol = 0;
+		normalNextRow = normalNextCol = 0;
 		cout << "All seats are cleared." << endl;
 	}
 
@@ -251,12 +252,70 @@ public:
 			replace(row_counter, col_counter);
 			col_counter++;
 			if (col_counter > 5) {
-				col_counter = 1;
+				col_counter = 1; // Reset to 1
 				row_counter++;
 			}
 			if (row_counter > 7) {
 				break;
 			}
 		}
+	}
+
+	/* Assign the seats automatically(for the loading of first 35 spectators in the priority queue)
+	   Remember to call clearAllSeats(); to clear all the seats before first loading */
+
+	// Define pointers for the next available seat position
+	int streamerNextCol = 0; // Column 0 - 4 (Single 1D array)
+	int vipNextRow = 0, vipNextCol = 0; // 2 Rows (0 - 1), 5 Columns (0 - 4)
+	int normalNextRow = 0, normalNextCol = 0; // 4 Rows (0 - 3), 5 Columns (0 - 4)
+
+	bool assignSeatAutomatically(Spectator s) {
+		switch (s.getSpectatorPriority()) {
+		case 1: // Streamer
+			if (streamerNextCol < streamerMaxSize) {
+				streamerSeats[streamerNextCol] = formatSeat(s.getSpectatorID(), s.getSpectatorName());
+				streamerCount++;
+				cout << "Streamer seated at Row 1, Column " << streamerNextCol + 1 << endl;
+				streamerNextCol++;
+				return true;
+			}
+			cout << "Streamer seats are full!" << endl;
+			break;
+		
+		case 2: // VIP
+			if (vipNextRow < 2) {
+				vipSeats[vipNextRow][vipNextCol] = formatSeat(s.getSpectatorID(), s.getSpectatorName());
+				vipCount++;
+				cout << "VIP seated at Row " << vipNextRow + 2 << ", Column " << vipNextCol + 1 << endl;
+				vipNextCol++;
+				if (vipNextCol >= 5) {
+					vipNextCol = 0; // Reset to 0
+					vipNextRow++;
+				}
+				return true;
+			}
+			cout << "VIP seats are full!" << endl;
+			break;
+
+		case 3: // Normal Spectator
+			if (normalNextRow < 4) {
+				normalSeats[normalNextRow][normalNextCol] = formatSeat(s.getSpectatorID(), s.getSpectatorName());
+				normalCount++;
+				cout << "Normal spectator seated at Row " << normalNextRow + 4 << ", Column " << normalNextCol + 1 << endl;
+				normalNextCol++;
+				if (normalNextCol >= 5) {
+					normalNextCol = 0;
+					normalNextRow++;
+				}
+				return true;
+			}
+			cout << "Normal spectator seats are full!" << endl;
+			break;
+
+		default:
+			cout << "Invalid spectator priority!" << endl;
+			break;
+		}
+		return false;
 	}
 };
