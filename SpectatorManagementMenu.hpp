@@ -92,7 +92,7 @@ public:
 
 	void loadPriorityQueue() {
 		for (int i = 0; i < numberOfSpectators; i++) {
-			priorityQueueSpectator.insertByPriority(SpectatorArray[i], &circularQueueSpectatorOverflow);
+			priorityQueueSpectator.insertByPriority(SpectatorArray[i], circularQueueSpectatorOverflow);
 		}
 		return;
 	}
