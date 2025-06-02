@@ -142,13 +142,37 @@ public:
 
 };
 
-class Viewer {
+class Spectator {
 private:
-	string ViewerID;
-	string ViewerName;
-	int ViewerPriority;
+	string SpectatorID;
+	string SpectatorName;
+	string SpectatorType;
+	int SpectatorPriority;
 
 public:
+	Spectator() {
+		SpectatorID = "";
+		SpectatorName = "";
+		SpectatorType = "";
+		SpectatorPriority = 0;
+	}
+
+	Spectator(string SpectatorID, string SpectatorName, string SpectatorType, string SpectatorPriorityText) {
+		this->SpectatorID = SpectatorID;
+		this->SpectatorName = SpectatorName;
+		this->SpectatorType = SpectatorType;
+		try {
+			SpectatorPriority = stoi(SpectatorPriorityText);
+		}
+		catch (...) {
+			throw invalid_argument("Spectator Priority Error");
+		}
+	}
+
+	string getSpectatorID() { return SpectatorID; }
+	string getSpectatorName() { return SpectatorName; }
+	string getSpectatorType() { return SpectatorType; }
+	int getSpectatorPriority() { return SpectatorPriority; }
 };
 
 template <typename T> struct Node {
