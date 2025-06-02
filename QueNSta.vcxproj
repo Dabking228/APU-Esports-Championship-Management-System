@@ -139,6 +139,7 @@
     <ClInclude Include="PriorityQueue.hpp" />
     <ClInclude Include="PriorityQueueSpectator.hpp" />
     <ClInclude Include="Queue.hpp" />
+    <ClInclude Include="SeatManagement.hpp" />
     <ClInclude Include="Stack.hpp" />
     <ClInclude Include="structure.hpp" />
     <ClInclude Include="TeamRegister.hpp" />
