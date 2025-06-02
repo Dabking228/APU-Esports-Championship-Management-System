@@ -56,5 +56,8 @@
     <ClInclude Include="CircularQueueSpectatorOverflow.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpectatorManagementMenu.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
