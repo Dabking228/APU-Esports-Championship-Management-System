@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "structure.hpp"
+#include "CircularQueueSpectatorOverflow.hpp"
 using namespace std;
 
 struct spectatorNode // Using doubly linked list
