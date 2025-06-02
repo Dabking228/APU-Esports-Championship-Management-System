@@ -152,7 +152,7 @@ public:
 	}
 
 	// Insert based on the priority
-	void insertByPriority(Spectator addSpectator, CircularQueueSpectatorOverflow* overflowQueue) {
+	void insertByPriority(Spectator addSpectator, CircularQueueSpectatorOverflow& overflowQueue) {
 		// Case 1: Queue is not full — insert as normal
 		if (!isFull()) {
 			insertByPriorityWithoutLimit(addSpectator);
@@ -168,8 +168,8 @@ public:
 			insertByPriorityWithoutLimit(addSpectator);
 
 			// Send removed spectator to overflow queue
-			if (!overflowQueue->isFull()) {
-				overflowQueue->enqueue(removed);
+			if (!overflowQueue.isFull()) {
+				overflowQueue.enqueue(removed);
 			}
 			else {
 				cout << "Overflow queue full! Lost spectator: " << removed.getSpectatorID() << endl;
@@ -177,8 +177,8 @@ public:
 		}
 		else {
 			// New spectator has lower or same priority, go to overflow
-			if (!overflowQueue->isFull()) {
-				overflowQueue->enqueue(addSpectator);
+			if (!overflowQueue.isFull()) {
+				overflowQueue.enqueue(addSpectator);
 			}
 			else {
 				cout << "Overflow queue full! Lost spectator: " << addSpectator.getSpectatorID() << endl;
