@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CircularQueue%28Q4%29.hpp" />
+    <ClInclude Include="CircularQueueSpectatorOverflow.hpp" />
     <ClInclude Include="LogHistory.hpp" />
     <ClInclude Include="MatchDetails.hpp" />
     <ClInclude Include="MatchDashboard.hpp" />
