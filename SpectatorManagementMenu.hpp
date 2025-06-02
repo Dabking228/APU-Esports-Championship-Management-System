@@ -19,7 +19,7 @@ class SpectatorMenu {
 	CircularQueueSpectatorOverflow circularQueueSpectatorOverflow;
 
 	string SpectatorDataset = "./data/Spectators.csv";
-
+public:
 	SpectatorMenu(){}
 
 	int getNumberOfSpectators(string filename) {

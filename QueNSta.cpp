@@ -196,7 +196,7 @@ int main() {
 			break;
 
 		case 3:
-			
+			specDashboard.openMenu();
 			break;
 
 		case 4:
