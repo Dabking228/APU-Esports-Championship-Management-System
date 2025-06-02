@@ -2,7 +2,9 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include "structure.hpp"
 #include "CircularQueueSpectatorOverflow.hpp"
+#include "PriorityQueueSpectator.hpp"
 
 using namespace std;
 
@@ -53,9 +55,9 @@ public:
 
 	// Constructor
 	Seat() {
-		EMPTY_SEAT = formatSeat("", "");
 		initSeats();
 		overflowQueue = new CircularQueueSpectatorOverflow(maxOverflowQueue);
+		EMPTY_SEAT = formatSeat("", "");
 	}
 
 	// Destructor

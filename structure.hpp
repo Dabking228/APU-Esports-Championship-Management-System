@@ -139,6 +139,7 @@ private:
 	int SpectatorPriority;
 
 public:
+
 	Spectator() {
 		SpectatorID = "";
 		SpectatorName = "";

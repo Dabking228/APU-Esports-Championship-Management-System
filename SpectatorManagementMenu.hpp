@@ -16,11 +16,17 @@ class SpectatorMenu {
 	Spectator* SpectatorArray;
 	Seat seat;
 	PriorityQueueSpectator priorityQueueSpectator;
-	CircularQueueSpectatorOverflow circularQueueSpectatorOverflow;
+	CircularQueueSpectatorOverflow circularQueueSpectatorOverflow(20);
 
 	string SpectatorDataset = "./data/Spectators.csv";
 public:
-	SpectatorMenu(){}
+	SpectatorMenu(){
+		int numberOfSpectators = 0;
+		Spectator* SpectatorArray;
+		Seat seat;
+		PriorityQueueSpectator priorityQueueSpectator;
+		CircularQueueSpectatorOverflow circularQueueSpectatorOverflow(20);
+	}
 
 	int getNumberOfSpectators(string filename) {
 		ifstream file(filename);

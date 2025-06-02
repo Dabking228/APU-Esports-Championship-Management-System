@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "structure.hpp"
+#include "PriorityQueueSpectator.hpp"
 
 using namespace std;
 
@@ -15,9 +16,9 @@ public:
 	// Constructor
 	
 
-	CircularQueueSpectatorOverflow() {
-		arr = new Spectator[20];
-		maxSize = 20;
+	CircularQueueSpectatorOverflow(int size) {
+		arr = new Spectator[size];
+		maxSize = size;
 		count = 0;
 		front = 0;
 		rear = -1;

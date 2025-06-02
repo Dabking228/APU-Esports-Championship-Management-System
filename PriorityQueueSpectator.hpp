@@ -152,7 +152,7 @@ public:
 	}
 
 	// Insert based on the priority
-	void insertByPriority(Spectator addSpectator, CircularQueueSpectatorOverflow& overflowQueue) {
+	void insertByPriority(Spectator addSpectator, CircularQueueSpectatorOverflow overflowQueue) {
 		// Case 1: Queue is not full — insert as normal
 		if (!isFull()) {
 			insertByPriorityWithoutLimit(addSpectator);
