@@ -131,17 +131,6 @@ public:
 // viewer can view the stream || need to create a struct for livestream??? || chat???
 
 
-class Stream {
-private:
-	string StreamID;
-	string StreamName;
-
-
-public:
-
-
-};
-
 class Spectator {
 private:
 	string SpectatorID;

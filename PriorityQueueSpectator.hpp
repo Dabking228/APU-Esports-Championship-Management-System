@@ -70,6 +70,10 @@ public:
 		return size;
 	}
 
+	int getMaxSize() {
+		return maxSize;
+	}
+
 	// Insert the spectator to the end of the priority queue
 	void enQueueToBack(Spectator spectatorData) {
 		if (isFull()) {
@@ -108,52 +112,27 @@ public:
 		size++;
 	}
 
-	// Remove spectator at any position
-	spectatorNode* DeQueue(int position) {
+	// Remove spectator from front
+	Spectator deQueue() {
 		if (isEmpty()) {
 			cout << "Priority queue is empty!" << endl;
-			return nullptr;
+			return Spectator();
 		}
 
-		spectatorNode* current = nullptr;
-		if (position == 1) { // First spectator
-			current = front;
-			front = front->nextAddress;
-			if (front == nullptr) {
-				rear = nullptr;
-			}
-			else {
-				front->prevAddress = nullptr;
-			}
-		}
-		else if (position == size) { // Last spectator
-			current = rear;
-			rear = rear->prevAddress;
-			if (rear == nullptr) {
-				front = nullptr;
-			}
-			else {
-				rear->nextAddress = nullptr;
-			}
-		}
-		else if (position < 1 || position > size) { // Position is out of range
-			return current;
-		}
-		else { // Spectator is in the middle
-			current = front->nextAddress;
-			int currentIndex = 2;
+		spectatorNode* current = front;
+		Spectator data = current->spectatorData;
 
-			while (currentIndex != position) {
-				current = current->nextAddress;
-				currentIndex++;
-			}
-			current->prevAddress->nextAddress = current->nextAddress;
-			current->nextAddress->prevAddress = current->prevAddress;
+		front = front->nextAddress;
+		if (front == nullptr) {
+			rear = nullptr;
 		}
-		current->nextAddress = nullptr;
-		current->prevAddress = nullptr;
+		else {
+			front->prevAddress = nullptr;
+		}
+
+		delete current;
 		size--;
-		return current;
+		return data;
 	}
 
 	// Display the whole priority queue
@@ -171,58 +150,96 @@ public:
 		cout << endl;
 	}
 
-	void MoveNthFront(int position) {
-		spectatorNode* newnode = DeQueue(position); // delete from the specific location
-		if (newnode != nullptr) {
-			enQueueToFront(newnode->spectatorData);
-		}
-	}
-
 	// Insert based on the priority
-	void insertByPriority(Spectator addSpectator) {
-		if (isFull()) {
-			cout << "Priority queue is full!" << endl;
+	void insertByPriority(Spectator addSpectator, CircularQueueSpectatorOverflow* overflowQueue) {
+		// Case 1: Queue is not full — insert as normal
+		if (!isFull()) {
+			insertByPriorityWithoutLimit(addSpectator);
 			return;
 		}
 
+		// Case 2: Queue is full — check if new spectator has higher priority than rear
+		if (addSpectator.getSpectatorPriority() < rear->spectatorData.getSpectatorPriority()) {
+			// Remove rear (lowest priority)
+			Spectator removed = removeRear();
+
+			// Insert new high-priority spectator in correct place
+			insertByPriorityWithoutLimit(addSpectator);
+
+			// Send removed spectator to overflow queue
+			if (!overflowQueue->isFull()) {
+				overflowQueue->enqueue(removed);
+			}
+			else {
+				cout << "Overflow queue full! Lost spectator: " << removed.getSpectatorID() << endl;
+			}
+		}
+		else {
+			// New spectator has lower or same priority, go to overflow
+			if (!overflowQueue->isFull()) {
+				overflowQueue->enqueue(addSpectator);
+			}
+			else {
+				cout << "Overflow queue full! Lost spectator: " << addSpectator.getSpectatorID() << endl;
+			}
+		}
+	}
+
+
+	void insertByPriorityWithoutLimit(Spectator addSpectator) {
 		spectatorNode* newnode = CreateNewNode(addSpectator);
 
-		// Empty List
 		if (isEmpty()) {
 			front = rear = newnode;
 			size++;
 			return;
 		}
 
-		// Higher priority than the front (1 = Streamer, 2 = VIP, 3 = Normal)
 		if (addSpectator.getSpectatorPriority() < front->spectatorData.getSpectatorPriority()) {
 			enQueueToFront(addSpectator);
 			return;
 		}
 
-		// Lower or same priority as the rear (last spectator)
 		if (addSpectator.getSpectatorPriority() >= rear->spectatorData.getSpectatorPriority()) {
 			enQueueToBack(addSpectator);
 			return;
 		}
 
 		spectatorNode* temp = front;
-
-		// Traverse to find the correct position to insert based on priority and FIFO
 		while (temp->nextAddress != nullptr &&
 			temp->nextAddress->spectatorData.getSpectatorPriority() <= addSpectator.getSpectatorPriority()) {
 			temp = temp->nextAddress;
 		}
 
 		newnode->nextAddress = temp->nextAddress;
-		if (temp->nextAddress != nullptr) { // Inserted between front and rear
+		if (temp->nextAddress != nullptr) {
 			temp->nextAddress->prevAddress = newnode;
 		}
-		else { // Inserted at the end, just in case (already handled in the code above)
+		else {
 			rear = newnode;
 		}
 		temp->nextAddress = newnode;
 		newnode->prevAddress = temp;
 		size++;
 	}
+
+	Spectator removeRear() {
+		if (isEmpty()) return Spectator();
+
+		spectatorNode* temp = rear;
+		Spectator data = temp->spectatorData;
+
+		if (front == rear) {
+			front = rear = nullptr;
+		}
+		else {
+			rear = rear->prevAddress;
+			rear->nextAddress = nullptr;
+		}
+
+		delete temp;
+		size--;
+		return data;
+	}
+
 };

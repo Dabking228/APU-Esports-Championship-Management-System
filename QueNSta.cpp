@@ -9,6 +9,11 @@
 #include "PlayerRegister.hpp"
 #include "MatchDashboard.hpp"
 #include "LogHistory.hpp"
+#include "PriorityQueueSpectator.hpp"
+#include "CircularQueueSpectatorOverflow.hpp"
+#include "SeatManagement.hpp"
+#include "SpectatorManagementMenu.hpp"
+
 using namespace std;
 
 string dummyPlayerLoct = "./data/Player.csv";
@@ -139,6 +144,7 @@ int main() {
 	TeamRegister TeamReg = TeamRegister(checkInPlayer, WaitingList, AwaitingList, Teams);
 	MatchDashboard MatchDash = MatchDashboard(Teams);
 	LogHistory Logs = LogHistory(MatchDash, PastTournaments);
+	SpectatorMenu specDashboard = SpectatorMenu();
 	
 	bool isLoopMenu = true;
 	int input;
@@ -190,7 +196,7 @@ int main() {
 			break;
 
 		case 3:
-			// live stream code
+			
 			break;
 
 		case 4:

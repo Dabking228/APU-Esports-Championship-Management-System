@@ -13,19 +13,21 @@ private:
 
 public:
 	// Constructor
-	CircularQueueSpectatorOverflow(int size) {
-		arr = new Spectator[size];
-		maxSize = size;
+	
+
+	CircularQueueSpectatorOverflow() {
+		arr = new Spectator[20];
+		maxSize = 20;
 		count = 0;
 		front = 0;
 		rear = -1;
 	}
 
 	// Destructor
-	~CircularQueueSpectatorOverflow() {
-		delete[] arr;
-		cout << "CircularQueueSpectatorOverflow has been deleted!" << endl;
-	}
+	//~CircularQueueSpectatorOverflow() {
+	//	delete[] arr;
+	//	cout << "CircularQueueSpectatorOverflow has been deleted!" << endl;
+	//}
 
 	// Check if the circular queue is empty
 	bool isEmpty() {
