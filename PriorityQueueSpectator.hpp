@@ -4,12 +4,13 @@
 #include "structure.hpp"
 using namespace std;
 
-struct spectatorNode //using doubly linked list
+struct spectatorNode // Using doubly linked list
 {
 	Spectator spectatorData;
 	spectatorNode* prevAddress;
 	spectatorNode* nextAddress;
 
+	// Node Constructor
 	spectatorNode(Spectator spectatorData) {
 		this->spectatorData = spectatorData;
 		prevAddress = nullptr;
@@ -23,11 +24,13 @@ class PriorityQueueSpectator {
 	const int maxSize = 35; // The first 35 spectators to enter the spectating area
 
 public:
+	// Priority queue constructor
 	PriorityQueueSpectator() {
 		front = rear = NULL;
 		size = 0;
 	}
 
+	// Destructor
 	~PriorityQueueSpectator() {
 		spectatorNode* temp = front;
 		while (temp != nullptr) {
@@ -38,26 +41,37 @@ public:
 		cout << "Spectator priority queue is deleted!" << endl;
 	}
 
+	// Create new spectator node 
 	spectatorNode* CreateNewNode(Spectator spectatorData) {
 		return new spectatorNode(spectatorData);
 	}
 
+	// Check whether the priority queue is empty
 	bool isEmpty() {
 		return (front == NULL && size == 0);
 	}
 
+	// Check whether the priority queue is full and has reached the max size of 35
 	bool isFull() {
 		return size == maxSize;
 	}
 
+	// Get the first spectator
 	Spectator peek() {
 		if (isEmpty()) {
 			cout << "Priority queue is empty!" << endl;
+			return Spectator();
 		}
 		return front->spectatorData;
 	}
 
-	void enQueue(Spectator spectatorData) { // normal process: add the spectator to the end of the priority queue
+	// Get the current number of spectators in the priority queue
+	int getSize() {
+		return size;
+	}
+
+	// Insert the spectator to the end of the priority queue
+	void enQueueToBack(Spectator spectatorData) {
 		if (isFull()) {
 			cout << "Priority queue is full!" << endl;
 			return;
@@ -75,7 +89,8 @@ public:
 		size++;
 	}
 
-	void enQueueToFront(Spectator spectatorData) { // insert spectator to the front of queue
+	// Insert the spectator to the front of queue
+	void enQueueToFront(Spectator spectatorData) {
 		if (isFull()) {
 			cout << "Priority queue is full!" << endl;
 			return;
@@ -93,6 +108,7 @@ public:
 		size++;
 	}
 
+	// Remove spectator at any position
 	spectatorNode* DeQueue(int position) { 
 		if (isEmpty()) {
 			cout << "Priority queue is empty!" << endl;
@@ -140,9 +156,8 @@ public:
 		return current;
 	}
 
-	
-
-	void displaySpectatorPriorityQueue() { // Priority process
+	// Display the whole priority queue
+	void displaySpectatorPriorityQueue() {
 		if (isEmpty()) {
 			cout << "Priority queue is empty!" << endl;
 			return;
@@ -163,5 +178,51 @@ public:
 		}
 	}
 
+	// Insert based on the priority
+	void insertByPriority(Spectator addSpectator) {
+		if (isFull()) {
+			cout << "Priority queue is full!" << endl;
+			return;
+		}
 
+		spectatorNode* newnode = CreateNewNode(addSpectator);
+
+		// Empty List
+		if (isEmpty()) { 
+			front = rear = newnode;
+			size++;
+			return;
+		}
+
+		// Higher priority than the front (1 = Streamer, 2 = VIP, 3 = Normal)
+		if (addSpectator.getSpectatorPriority() < front->spectatorData.getSpectatorPriority()) {
+			enQueueToFront(addSpectator);
+			return;
+		}
+
+		// Lower or same priority as the rear (last spectator)
+		if (addSpectator.getSpectatorPriority() >= rear->spectatorData.getSpectatorPriority()) {
+			enQueueToBack(addSpectator);
+			return;
+		}
+
+		spectatorNode* temp = front;
+
+		// Traverse to find the correct position to insert based on priority and FIFO
+		while (temp->nextAddress != nullptr &&
+			temp->nextAddress->spectatorData.getSpectatorPriority() <= addSpectator.getSpectatorPriority()) {
+			temp = temp->nextAddress;
+		}
+
+		newnode->nextAddress = temp->nextAddress;
+		if (temp->nextAddress != nullptr) { // Inserted between front and rear
+			temp->nextAddress->prevAddress = newnode;
+		}
+		else { // Inserted at the end, just in case (already handled in the code above)
+			rear = newnode;
+		}
+		temp->nextAddress = newnode;
+		newnode->prevAddress = temp;
+		size++;
+	}
 };
