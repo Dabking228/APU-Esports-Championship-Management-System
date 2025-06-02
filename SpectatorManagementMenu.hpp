@@ -129,7 +129,7 @@ public:
 
 			case 4: seat.displayAllSeats(); break;
 
-			case 5: 
+			case 5: {
 				while (!priorityQueueSpectator.isEmpty()) {
 					Spectator s = priorityQueueSpectator.deQueue();
 					if (!seat.assignSeatAutomatically(s)) {
@@ -138,8 +138,9 @@ public:
 					}
 				}
 				break;
+			}
 
-			case 6: 
+			case 6: {
 				int row = 0;
 				int col = 0;
 				cout << "Enter the row: ";
@@ -147,8 +148,9 @@ public:
 				cout << "\nEnter the column: ";
 				cin >> col;
 				seat.replace(row, col); break;
+			}
 
-			case 7: 
+			case 7: {
 				int row = 0;
 				int col = 0;
 				cout << "Enter the row: ";
@@ -156,8 +158,9 @@ public:
 				cout << "\nEnter the column: ";
 				cin >> col;
 				seat.clearSeat(row, col); break;
+			}
 				
-			case 8: 
+			case 8: {
 				int row = 0;
 				int col = 0;
 				cout << "Enter the row: ";
@@ -165,6 +168,7 @@ public:
 				cout << "\nEnter the column: ";
 				cin >> col;
 				seat.clearAndReplace(row, col); break;
+			}
 
 			case 9: seat.clearAllSeats(); break;
 
